@@ -33,25 +33,6 @@ class CruiseInstall extends Command
      */
     public function handle(): int
     {
-        Artisan::call('vendor:publish --tag=docker');
-
-        $docker_compose_files = [
-            'docker-compose.yml',
-            'docker-compose-dev.yml',
-            'docker-compose-dev-db.yml',
-            'docker-compose-dev-node.yml',
-        ];
-
-        // Find & replace app name
-        foreach ($docker_compose_files as $file) {
-            (new Process([
-                'perl',
-                '-pi',
-                '"s/cruise-boilerplate/' . config('app.name') . '/g"',
-                "./{$file}",
-            ]))->run();
-        }
-
-        return 1;
+        return Artisan::call('vendor:publish --tag=docker');
     }
 }

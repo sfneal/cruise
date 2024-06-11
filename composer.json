@@ -42,9 +42,6 @@
         }
     },
     "scripts": {
-        "post-package-install": [
-            "php artisan cruise:install"
-        ],
         "test": "vendor/bin/phpunit"
     },
     "config": {
