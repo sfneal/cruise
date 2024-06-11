@@ -3,12 +3,12 @@
 namespace Sfneal\Cruise\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Sfneal\Cruise\Database\MigrateDbInProduction;
-use Sfneal\Cruise\Database\WaitForDb;
-use Sfneal\Cruise\Semver\Bump;
-use Sfneal\Cruise\Semver\BumpMajor;
-use Sfneal\Cruise\Semver\BumpMinor;
-use Sfneal\Cruise\Semver\BumpPatch;
+use Sfneal\Cruise\Commands\Database\MigrateDbInProduction;
+use Sfneal\Cruise\Commands\Database\WaitForDb;
+use Sfneal\Cruise\Commands\Semver\Bump;
+use Sfneal\Cruise\Commands\Semver\BumpMajor;
+use Sfneal\Cruise\Commands\Semver\BumpMinor;
+use Sfneal\Cruise\Commands\Semver\BumpPatch;
 
 class CruiseServiceProvider extends ServiceProvider
 {

@@ -1,26 +1,26 @@
 <?php
 
-namespace Sfneal\Cruise\Semver;
+namespace Sfneal\Cruise\Commands\Semver;
 
 use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
 
-class BumpPatch extends Command
+class BumpMinor extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'bump:patch';
+    protected $signature = 'bump:minor';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Bump the application to the next patch version (e.g. v1.3.4 to v1.3.5)';
+    protected $description = 'Bump the application to the next minor version (e.g. v1.1 to v1.2)';
 
     /**
      * Execute the console command.
@@ -30,6 +30,6 @@ class BumpPatch extends Command
      */
     public function handle(): int
     {
-        return Artisan::call('bump patch');
+        return Artisan::call('bump minor');
     }
 }

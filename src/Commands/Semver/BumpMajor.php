@@ -1,6 +1,6 @@
 <?php
 
-namespace Sfneal\Cruise\Semver;
+namespace Sfneal\Cruise\Commands\Semver;
 
 use Exception;
 use Illuminate\Console\Command;
