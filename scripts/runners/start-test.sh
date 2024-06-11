@@ -9,7 +9,7 @@ BRANCH="${BRANCH/${replace}/${replacewith}}"
 export BRANCH
 
 # Shut down currently running containers
-php artisan cruise:stop
+composer stop
 
 # Build new containers
 docker compose -f docker-compose-tests.yml build
