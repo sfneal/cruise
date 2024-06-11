@@ -32,7 +32,7 @@ class CruiseServiceProvider extends ServiceProvider
         }
 
         $this->publishes([
-            __DIR__.'/../' => __DIR__.'/../../docker/services',
+            __DIR__.'/../../docker/services' => base_path(''),
         ], 'docker');
     }
 
