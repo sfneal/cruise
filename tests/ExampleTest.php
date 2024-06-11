@@ -1,6 +1,6 @@
 <?php
 
-namespace Sfneal\PhpPackageBoilerplate\Tests;
+namespace Sfneal\Cruise\Tests;
 
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;

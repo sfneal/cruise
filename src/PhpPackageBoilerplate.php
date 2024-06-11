@@ -1,8 +1,8 @@
 <?php
 
-namespace Sfneal\PhpPackageBoilerplate;
+namespace Sfneal\Cruise;
 
-class PhpPackageBoilerplate
+class Cruise
 {
     // Build your next great package.
 }
