@@ -6,6 +6,9 @@ use Illuminate\Support\ServiceProvider;
 use Sfneal\Cruise\Commands\CruiseInstall;
 use Sfneal\Cruise\Commands\Database\MigrateDbInProduction;
 use Sfneal\Cruise\Commands\Database\WaitForDb;
+use Sfneal\Cruise\Commands\Runners\Build;
+use Sfneal\Cruise\Commands\Runners\Start;
+use Sfneal\Cruise\Commands\Runners\Stop;
 use Sfneal\Cruise\Commands\Semver\Bump;
 use Sfneal\Cruise\Commands\Semver\BumpMajor;
 use Sfneal\Cruise\Commands\Semver\BumpMinor;
@@ -32,6 +35,11 @@ class CruiseServiceProvider extends ServiceProvider
 
                 // Install command
                 CruiseInstall::class,
+
+                // Docker commands
+                Start::class,
+                Stop::class,
+                Build::class,
             ]);
         }
 
