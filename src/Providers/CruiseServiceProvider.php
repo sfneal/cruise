@@ -3,6 +3,7 @@
 namespace Sfneal\Cruise\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Sfneal\Cruise\Commands\CruiseInstall;
 use Sfneal\Cruise\Commands\Database\MigrateDbInProduction;
 use Sfneal\Cruise\Commands\Database\WaitForDb;
 use Sfneal\Cruise\Commands\Semver\Bump;
@@ -27,7 +28,10 @@ class CruiseServiceProvider extends ServiceProvider
                 Bump::class,
                 BumpMajor::class,
                 BumpMinor::class,
-                BumpPatch::class
+                BumpPatch::class,
+
+                // Install command
+                CruiseInstall::class,
             ]);
         }
 
