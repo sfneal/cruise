@@ -33,6 +33,8 @@ class CruiseInstall extends Command
      */
     public function handle(): int
     {
-        return Artisan::call('vendor:publish --tag=docker');
+        $result = Artisan::call('vendor:publish --tag=docker');
+        $this->info("Published docker assets to the application root");
+        return $result;
     }
 }
