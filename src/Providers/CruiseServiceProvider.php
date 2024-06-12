@@ -35,8 +35,19 @@ class CruiseServiceProvider extends ServiceProvider
             ]);
         }
 
+        // Docker compose & dockerfiles
         $this->publishes([
             __DIR__.'/../../docker/services' => base_path(''),
+        ], 'docker');
+
+        // Supervisor configs
+        $this->publishes([
+            __DIR__.'/../../docker/supervisor' => base_path('docker/supervisor'),
+        ], 'docker');
+
+        // Docker scripts configs
+        $this->publishes([
+            __DIR__.'/../../docker/scripts' => base_path('docker/scripts'),
         ], 'docker');
     }
 
