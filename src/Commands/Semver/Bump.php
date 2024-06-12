@@ -25,9 +25,6 @@ class Bump extends Command implements PromptsForMissingInput
 
     /**
      * Execute the console command.
-     *
-     *
-     * @throws Exception
      */
     public function handle(): int
     {
