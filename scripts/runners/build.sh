@@ -12,4 +12,4 @@ BRANCH="${BRANCH/${replace}/${replacewith}}"
 export BRANCH
 
 # Build new containers
-docker compose -f docker-compose-"${env}".yml build
+docker compose -f docker-compose-${ENV}.yml build
