@@ -27,27 +27,37 @@ class CruiseInstall extends Command
 
     /**
      * Execute the console command.
-     *
-     *
-     * @throws Exception
      */
     public function handle(): int
     {
         Artisan::call('vendor:publish --tag=docker');
         $this->info("Published docker assets to the application root");
 
-        $script_path = 'vendor/sfneal/cruise/scripts/runners';
-        (new Process(['composer', 'config', 'scripts.start-dev', "sh $script_path/start-dev.sh"]))->run();
-        (new Process(['composer', 'config', 'scripts.start-dev-db', "sh $script_path/start-dev-db.sh"]))->run();
-        (new Process(['composer', 'config', 'scripts.start-dev-node', "sh $script_path/start-dev-node.sh"]))->run();
-        (new Process(['composer', 'config', 'scripts.start-test', "sh $script_path/start-test.sh"]))->run();
-        (new Process(['composer', 'config', 'scripts.stop', "sh $script_path/stop.sh"]))->run();
-        (new Process(['composer', 'config', 'scripts.build', "sh $script_path/build.sh"]))->run();
+        $this->addComposerScript('start-dev');
+        $this->addComposerScript('start-dev-db');
+        $this->addComposerScript('start-dev-node');
+        $this->addComposerScript('start-test');
+        $this->addComposerScript('stop');
+        $this->addComposerScript('build');
         $this->info("Published composer scripts for starting/stopping docker services");
 
-        copy(base_path('.env'), base_path('.env.dev'));
-        copy(base_path('.env'), base_path('.env.dev.db'));
+        if (! file_exists(base_path('.env.dev'))) {
+            copy(base_path('.env'), base_path('.env.dev'));
+        }
+        if (! file_exists(base_path('.env.dev.db'))) {
+            copy(base_path('.env'), base_path('.env.dev.db'));
+        }
+
 
         return 1;
+    }
+
+    private function addComposerScript(string $script): void
+    {
+        $script_path = 'vendor/sfneal/cruise/scripts/runners';
+
+        (new Process(['composer', 'config', 'scripts.start-dev', "sh $script_path/$script.sh"]))->run();
+
+        $this->info("Added 'composer $script' command to composer.json");
     }
 }
