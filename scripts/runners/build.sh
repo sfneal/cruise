@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -e -u
 
 # Declare the 'environment' ('dev', 'dev-db', 'dev-node', 'tests')
 ENV=${1-"dev"}

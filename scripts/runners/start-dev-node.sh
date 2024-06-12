@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -e -u
 
 # Export Docker image Tag
 BRANCH=$(git rev-parse --abbrev-ref HEAD)
