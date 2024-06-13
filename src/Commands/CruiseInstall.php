@@ -1,0 +1,63 @@
+<?php
+
+namespace Sfneal\Cruise\Commands;
+
+use Exception;
+use Illuminate\Console\Command;
+use Illuminate\Console\Events\ArtisanStarting;
+use Illuminate\Contracts\Console\PromptsForMissingInput;
+use Illuminate\Support\Facades\Artisan;
+use Symfony\Component\Process\Process;
+
+class CruiseInstall extends Command
+{
+    /**
+     * The name and signature of the console command.
+     *
+     * @var string
+     */
+    protected $signature = 'cruise:install';
+
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
+    protected $description = 'Install the cruise package and publish files';
+
+    /**
+     * Execute the console command.
+     */
+    public function handle(): int
+    {
+        Artisan::call('vendor:publish --tag=docker');
+        $this->info("Published docker assets to the application root");
+
+        $this->addComposerScript('start-dev');
+        $this->addComposerScript('start-dev-db');
+        $this->addComposerScript('start-dev-node');
+        $this->addComposerScript('start-test');
+        $this->addComposerScript('stop');
+        $this->addComposerScript('build');
+        $this->info("Published composer scripts for starting/stopping docker services");
+
+        if (! file_exists(base_path('.env.dev'))) {
+            copy(base_path('.env'), base_path('.env.dev'));
+        }
+        if (! file_exists(base_path('.env.dev.db'))) {
+            copy(base_path('.env'), base_path('.env.dev.db'));
+        }
+
+
+        return 1;
+    }
+
+    private function addComposerScript(string $script): void
+    {
+        $script_path = 'vendor/sfneal/cruise/scripts/runners';
+
+        (new Process(['composer', 'config', "scripts.$script", "sh $script_path/$script.sh"]))->run();
+
+        $this->info("Added 'composer $script' command to composer.json");
+    }
+}

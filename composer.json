@@ -1,11 +1,11 @@
 {
-    "name": "sfneal/php-package-boilerplate",
+    "name": "sfneal/cruise",
     "description": "Boilerplate for PHP package repo's",
     "keywords": [
         "sfneal",
         "php-package-boilerplate"
     ],
-    "homepage": "https://github.com/sfneal/php-package-boilerplate",
+    "homepage": "https://github.com/sfneal/cruise",
     "license": "MIT",
     "type": "library",
     "authors": [
@@ -16,28 +16,33 @@
         }
     ],
     "require": {
-        "php": "^8.1|^8.2|^8.3"
+        "php": "^8.2|^8.3",
+        "sfneal/laravel-helpers": "^2.4",
+        "symfony/process": "^6.0|^7.0"
     },
     "require-dev": {
-        "orchestra/testbench": "^7.40|^8.0",
-        "phpunit/phpunit": "^9.6|^10.0|^11.0"
+        "orchestra/testbench": "^9.0",
+        "phpunit/phpunit": "^11.0"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Sfneal\\Cruise\\Providers\\CruiseServiceProvider"
+            ]
+        }
     },
     "autoload": {
         "psr-4": {
-            "Sfneal\\PhpPackageBoilerplate\\": "src"
+            "Sfneal\\Cruise\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Sfneal\\PhpPackageBoilerplate\\Tests\\": "tests"
+            "Sfneal\\Cruise\\Tests\\": "tests"
         }
     },
     "scripts": {
-        "test": "vendor/bin/phpunit",
-        "test-lowest" : [
-            "composer update --prefer-lowest",
-            "composer test"
-        ]
+        "test": "vendor/bin/phpunit"
     },
     "config": {
         "sort-packages": true
