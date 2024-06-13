@@ -1,15 +1,23 @@
 #!/usr/bin/env bash
-set -e -u
 
 # Declare the 'environment' ('dev', 'dev-db', 'dev-node', 'tests')
 ENV=${1-"dev"}
 
+BRANCH="default"
+
 # Export Docker image Tag
-BRANCH=$(git rev-parse --abbrev-ref HEAD)
-replace='/'
-replacewith='-'
-BRANCH="${BRANCH/${replace}/${replacewith}}"
-BRANCH="${BRANCH/${replace}/${replacewith}}"
+inside_git_repo="$(git rev-parse --is-inside-work-tree 2>/dev/null)"
+
+if [ "$inside_git_repo" ]; then
+	BRANCH=$(git rev-parse --abbrev-ref HEAD)
+	replace='/'
+	replacewith='-'
+	BRANCH="${BRANCH/${replace}/${replacewith}}"
+	BRANCH="${BRANCH/${replace}/${replacewith}}"
+fi
+
+set -e -u
+
 export BRANCH
 
 # Build new containers
