@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-set -e -u
+
+BRANCH="default"
 
 # Export Docker image Tag
 inside_git_repo="$(git rev-parse --is-inside-work-tree 2>/dev/null)"
@@ -10,9 +11,9 @@ if [ "$inside_git_repo" ]; then
 	replacewith='-'
 	BRANCH="${BRANCH/${replace}/${replacewith}}"
 	BRANCH="${BRANCH/${replace}/${replacewith}}"
-else
-	BRANCH="default"
 fi
+
+set -e -u
 
 export BRANCH
 
