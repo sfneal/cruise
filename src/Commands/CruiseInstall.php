@@ -43,11 +43,12 @@ class CruiseInstall extends Command
 
         if (! file_exists(base_path('.env.dev'))) {
             copy(base_path('.env'), base_path('.env.dev'));
+            $this->info("Published missing .env.dev file");
         }
         if (! file_exists(base_path('.env.dev.db'))) {
             copy(base_path('.env'), base_path('.env.dev.db'));
+            $this->info("Published missing .env.dev.db file");
         }
-
 
         return 1;
     }
