@@ -3,7 +3,7 @@
     "description": "Boilerplate for PHP package repo's",
     "keywords": [
         "sfneal",
-        "php-package-boilerplate"
+        "cruise"
     ],
     "homepage": "https://github.com/sfneal/cruise",
     "license": "MIT",
