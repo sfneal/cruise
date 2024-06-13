@@ -33,41 +33,42 @@ jobs:
 
             -   name: Download & Extract laravel-boilerplate repo
                 run: |
-                    pwd
-                    ls
                     cd ../
                     wget https://github.com/sfneal/laravel-boilerplate/archive/master.zip
                     unzip master.zip
                     rm master.zip
                     cd laravel-boilerplate-master
-                    pwd
-                    ls
 
             -   name: Set minimum stability in composer.json
+                working-directory: ../laravel-boilerplate-master
                 run: |
                     pwd
                     ls
                     composer config minimum-stability dev
 
             -   name: Add local repository to downstream composer.json
+                working-directory: ../laravel-boilerplate-master
                 run: |
                     pwd
                     ls
                     composer config repositories.0 '{"type": "vcs", "url": "https://github.com/sfneal/cruise"}'
 
             -   name: Add sfneal/cruise to composer requirements
+                working-directory: ../laravel-boilerplate-master
                 run: |
                     pwd
                     ls
                     composer require "sfneal/cruise dev-${{ env.CRUISE_BRANCH }}"
 
             -   name: Install sfneal/cruise
+                working-directory: ../laravel-boilerplate-master
                 run: |
                     pwd
                     ls
                     php artisan cruise:install
 
             -   name: Test Downstream App
+                working-directory: ../laravel-boilerplate-master
                 run: |
                     pwd
                     ls
