@@ -1,0 +1,58 @@
+name: Downstream Installation
+
+on:
+    push:
+
+jobs:
+    downstream:
+        runs-on: ${{ matrix.os }}
+        strategy:
+            fail-fast: false
+            matrix:
+                os: [ubuntu-latest]
+                php: [8.3]
+
+        name: Downstream App Installation
+
+        steps:
+            -   name: Checkout code
+                uses: actions/checkout@v4
+
+            -   name: Setup PHP
+                uses: shivammathur/setup-php@v2
+                with:
+                    php-version: ${{ matrix.php }}
+                    coverage: none
+
+            -   name: Install Composer Dependencies
+                run: |
+                    composer update --prefer-dist --no-interaction
+
+            -   name: Set sfneal/cruise branch
+                run: echo "CRUISE_BRANCH=$(git rev-parse --abbrev-ref HEAD)" >> $GITHUB_ENV
+
+            -   name: Download & Extract laravel-boilerplate repo
+                run: |
+                    cd ../
+                    wget https://github.com/sfneal/laravel-boilerplate/archive/master.zip
+                    unzip master.zip
+                    rm master.zip
+                    cd laravel-boilerplate-master
+
+            -   name: Set minimum stability in composer.json
+                run: |
+                    composer config minimum-stability dev
+
+            -   name: Add local repository to downstream composer.json
+                run: |
+                    composer config repositories.0 '{"type": "vcs", "url": "https://github.com/sfneal/cruise"}'
+
+            -   name: Add sfneal/cruise to composer requirements
+                run: |
+                    composer require "sfneal/cruise dev-${{ env.VERSION }}"
+
+            -   name: Install sfneal/cruise
+                run: php artisan cruise:install
+
+            -   name: Test Downstream App
+                run: composer start-test
