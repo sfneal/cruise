@@ -18,10 +18,10 @@ set -e -u
 export BRANCH
 
 # Build new containers
-if [ "${ENV}" == 'prod' ]; then
+if [[ "$ENV" == 'prod' ]]; then
     # Retrieve the version number
     VERSION="$(head -n 1 version.txt)"
-	docker build -t ${IMAGE}:"${VERSION//}" .
+	docker build -t "${IMAGE}:${VERSION//}" .
 else
     docker compose -f docker-compose-${ENV}.yml build
 fi
