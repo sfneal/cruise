@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
-# Declare the 'environment' ('dev', 'dev-db', 'dev-node', 'tests')
+# Declare the 'environment' ('prod', 'dev', 'dev-db', 'dev-node', 'tests')
 ENV=${1-"dev"}
+IMAGE=${2-'production-image'}
 
 BRANCH="default"
 
@@ -21,4 +22,10 @@ set -e -u
 export BRANCH
 
 # Build new containers
-docker compose -f docker-compose-${ENV}.yml build
+if [ $ENV == 'prod' ]; then
+    # Retrieve the version number
+    VERSION="$(head -n 1 version.txt)"
+	docker build -t ${IMAGE}:"${VERSION//}" .
+else
+    docker compose -f docker-compose-${ENV}.yml build
+fi
