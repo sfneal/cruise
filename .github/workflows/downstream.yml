@@ -29,7 +29,10 @@ jobs:
                     composer update --prefer-dist --no-interaction
 
             -   name: Set sfneal/cruise branch
-                run: echo "CRUISE_BRANCH=$(git rev-parse --abbrev-ref HEAD)" >> $GITHUB_ENV
+                run: |
+                    BRANCH=$(git rev-parse --abbrev-ref HEAD)
+                    if [ $BRANCH == 'HEAD' ]; then export BRANCH='master'; fi
+                    echo "CRUISE_BRANCH=$BRANCH" >> $GITHUB_ENV
 
             -   name: Download & Extract laravel-boilerplate repo
                 run: |
