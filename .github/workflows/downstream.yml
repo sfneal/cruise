@@ -1,4 +1,4 @@
-name: Downstream Installation
+name: Downstream
 
 on:
     push:
@@ -33,12 +33,15 @@ jobs:
 
             -   name: Download & Extract laravel-boilerplate repo
                 run: |
+                    pwd
+                    ls
                     cd ../
                     wget https://github.com/sfneal/laravel-boilerplate/archive/master.zip
                     unzip master.zip
                     rm master.zip
                     cd laravel-boilerplate-master
                     pwd
+                    ls
 
             -   name: Set minimum stability in composer.json
                 run: |
