@@ -5,12 +5,7 @@ set -e -u
 ENV=${1-"dev"}
 
 # Export Docker image Tag
-BRANCH=$(git rev-parse --abbrev-ref HEAD)
-replace='/'
-replacewith='-'
-BRANCH="${BRANCH/${replace}/${replacewith}}"
-BRANCH="${BRANCH/${replace}/${replacewith}}"
-export BRANCH
+sh $(dirname "$0")/_get_branch.sh
 
 # Build new containers
 docker compose -f docker-compose-${ENV}.yml build

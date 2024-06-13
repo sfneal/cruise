@@ -2,12 +2,7 @@
 set -e -u
 
 # Export Docker image Tag
-BRANCH=$(git rev-parse --abbrev-ref HEAD)
-replace='/'
-replacewith='-'
-BRANCH="${BRANCH/${replace}/${replacewith}}"
-BRANCH="${BRANCH/${replace}/${replacewith}}"
-export BRANCH
+sh $(dirname "$0")/_get_branch.sh
 
 docker compose down -v --remove-orphans
 
