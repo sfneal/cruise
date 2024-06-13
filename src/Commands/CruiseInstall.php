@@ -41,15 +41,16 @@ class CruiseInstall extends Command
         $this->addComposerScript('build');
         $this->info("Published composer scripts for starting/stopping docker services");
 
-        if (! file_exists(base_path('.env.dev'))) {
+        if (! file_exists(base_path('.env.dev')) && file_exists(base_path('.env'))) {
             copy(base_path('.env'), base_path('.env.dev'));
+            $this->info("Published missing .env.dev file");
         }
-        if (! file_exists(base_path('.env.dev.db'))) {
-            copy(base_path('.env'), base_path('.env.dev.db'));
+        if (! file_exists(base_path('.env.dev.db')) && file_exists(base_path('.env'))) {
+            copy(base_path('.env.dev'), base_path('.env.dev.db'));
+            $this->info("Published missing .env.dev.db file");
         }
 
-
-        return 1;
+        return 0;
     }
 
     private function addComposerScript(string $script): void
