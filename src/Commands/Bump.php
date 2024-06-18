@@ -45,7 +45,7 @@ class Bump extends Command implements PromptsForMissingInput
     {
         parent::__construct();
 
-        $this->version = AppInfo::version();
+        $this->version = Version::get();
     }
 
     /**
