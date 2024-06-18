@@ -5,6 +5,7 @@ namespace Sfneal\Cruise\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Console\PromptsForMissingInput;
 use Illuminate\Support\Facades\Process;
+use Sfneal\Helpers\Laravel\AppInfo;
 use function Laravel\Prompts\select;
 
 class Bump extends Command implements PromptsForMissingInput
@@ -27,6 +28,25 @@ class Bump extends Command implements PromptsForMissingInput
      * @var string
      */
     protected $description = 'Bump the application to the next major, minor or patch version';
+
+    /**
+     * The current application version
+     *
+     * @var string
+     */
+    protected string $version;
+
+    /**
+     * Create a new console command instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->version = Version::get();
+    }
 
     /**
      * Execute the console command.
@@ -69,12 +89,17 @@ class Bump extends Command implements PromptsForMissingInput
     protected function promptForMissingArgumentsUsing(): array
     {
         return [
-            'type' => fn () => select(
-                label: 'Which semver segment would you like to bump?',
-                options: self::TYPES,
-                default: 'patch',
-                hint: 'E.g. major, minor or patch',
-            ),
+            'type' => function() {
+                // Display table with bump options
+                $this->displaySemverOptions();
+
+                return select(
+                    label: 'Which semver segment would you like to bump?',
+                    options: self::TYPES,
+                    default: 'patch',
+                    hint: 'E.g. major, minor or patch',
+                );
+            },
         ];
     }
 
@@ -91,5 +116,26 @@ class Bump extends Command implements PromptsForMissingInput
     private function isCommitDisabled(): bool
     {
         return ! $this->option('commit') || $this->option('no-commit');
+    }
+
+    private function displaySemverOptions(): void
+    {
+        $data = [];
+
+        foreach (self::TYPES as $type) {
+            $process = Process::path(base_path())->run([
+                'bash', $this->getScriptPath('semver.sh'),
+                "--$type"
+            ]);
+
+            $data[] = [
+                'type' => ucwords($type),
+                'old' => $this->version,
+                'new' => trim($process->output())
+            ];
+
+        }
+
+        $this->table(['Type', 'Old', 'New'], $data);
     }
 }
