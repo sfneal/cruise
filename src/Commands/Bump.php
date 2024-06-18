@@ -64,21 +64,23 @@ class Bump extends Command implements PromptsForMissingInput
         $this->info($message);
 
         // Exit process if bump failed or the 'commit' option is NOT enabled
-        if ($bumpProcess->failed() || $this->isCommitDisabled()) {
+        if ($bumpProcess->failed()) {
             return $bumpProcess->exitCode();
         }
 
-        // Run the commit process
-        $commitProcess = Process::path(base_path())->run([
-            'bash', $this->getScriptPath('commit.sh'),
-            $message
-        ]);
+        if ($this->isCommitEnabled()) {
+            // Run the commit process
+            $commitProcess = Process::path(base_path())->run([
+                'bash', $this->getScriptPath('commit.sh'),
+                $message
+            ]);
 
-        if ($commitProcess->failed()) {
-            return $commitProcess->exitCode();
+            if ($commitProcess->failed()) {
+                return $commitProcess->exitCode();
+            }
         }
 
-        return $bumpProcess->successful() && $commitProcess->successful() ? 1 : 0;
+        return self::SUCCESS;
     }
 
     /**
