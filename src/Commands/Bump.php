@@ -5,6 +5,7 @@ namespace Sfneal\Cruise\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Console\PromptsForMissingInput;
 use Illuminate\Support\Facades\Process;
+use Sfneal\Helpers\Laravel\AppInfo;
 use function Laravel\Prompts\select;
 
 class Bump extends Command implements PromptsForMissingInput
@@ -29,10 +30,32 @@ class Bump extends Command implements PromptsForMissingInput
     protected $description = 'Bump the application to the next major, minor or patch version';
 
     /**
+     * The current application version
+     *
+     * @var string
+     */
+    protected string $version;
+
+    /**
+     * Create a new console command instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->version = AppInfo::version();
+    }
+
+    /**
      * Execute the console command.
      */
     public function handle(): int
     {
+        // Get the current app version
+        $this->info("Current application version: {$this->version}");
+
         // Run bump command
         $bumpProcess = Process::path(base_path())->run([
             'bash', $this->getScriptPath('bump.sh'),
