@@ -28,9 +28,9 @@ class Version extends Command implements PromptsForMissingInput
      */
     public function handle(): int
     {
-        $process = Process::path(base_path())->run("$(head -n 1 version.txt)");
+        $process = Process::path(base_path())->run("head -n 1 version.txt");
 
-        $this->info($process->output());
+        $this->info('v' . $process->output());
 
         return $process->exitCode();
     }
