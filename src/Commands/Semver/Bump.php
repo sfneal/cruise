@@ -5,7 +5,7 @@ namespace Sfneal\Cruise\Commands\Semver;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Console\PromptsForMissingInput;
 use Illuminate\Support\Facades\Process;
-use function Laravel\Prompts\search;
+use function Laravel\Prompts\select;
 
 class Bump extends Command implements PromptsForMissingInput
 {
@@ -46,10 +46,11 @@ class Bump extends Command implements PromptsForMissingInput
     protected function promptForMissingArgumentsUsing(): array
     {
         return [
-            'user' => fn () => search(
+            'user' => fn () => select(
                 label: 'Which semver segment would you like to bump?',
-                options: fn ($type) => self::TYPES,
-                placeholder: 'E.g. major, minor or patch',
+                options: self::TYPES,
+                default: 'path',
+                hint: 'E.g. major, minor or patch',
             ),
         ];
     }
