@@ -53,9 +53,6 @@ class Bump extends Command implements PromptsForMissingInput
      */
     public function handle(): int
     {
-        // Get the current app version
-        $this->info("Current application version: {$this->version}");
-
         // Run bump command
         $bumpProcess = Process::path(base_path())->run([
             'bash', $this->getScriptPath('bump.sh'),
@@ -93,6 +90,9 @@ class Bump extends Command implements PromptsForMissingInput
     {
         return [
             'type' => function() {
+                // Display table with bump options
+                $this->displaySemverOptions();
+
                 return select(
                     label: 'Which semver segment would you like to bump?',
                     options: self::TYPES,
@@ -116,5 +116,26 @@ class Bump extends Command implements PromptsForMissingInput
     private function isCommitDisabled(): bool
     {
         return ! $this->option('commit') || $this->option('no-commit');
+    }
+
+    private function displaySemverOptions(): void
+    {
+        $data = [];
+
+        foreach (self::TYPES as $type) {
+            $process = Process::path(base_path())->run([
+                'bash', $this->getScriptPath('semver.sh'),
+                "--$type"
+            ]);
+
+            $data[] = [
+                'type' => ucwords($type),
+                'old' => $this->version,
+                'new' => trim($process->output())
+            ];
+
+        }
+
+        $this->table(['Type', 'Old', 'New'], $data);
     }
 }
