@@ -1,6 +1,6 @@
 <?php
 
-namespace Sfneal\Cruise\Commands\Semver;
+namespace Sfneal\Cruise\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Console\PromptsForMissingInput;
