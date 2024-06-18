@@ -92,12 +92,14 @@ class Bump extends Command implements PromptsForMissingInput
     protected function promptForMissingArgumentsUsing(): array
     {
         return [
-            'type' => fn () => select(
-                label: 'Which semver segment would you like to bump?',
-                options: self::TYPES,
-                default: 'patch',
-                hint: 'E.g. major, minor or patch',
-            ),
+            'type' => function() {
+                return select(
+                    label: 'Which semver segment would you like to bump?',
+                    options: self::TYPES,
+                    default: 'patch',
+                    hint: 'E.g. major, minor or patch',
+                );
+            },
         ];
     }
 
