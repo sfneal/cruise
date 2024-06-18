@@ -31,7 +31,7 @@ class Bump extends Command implements PromptsForMissingInput
      */
     public function handle(): int
     {
-        $process = Process::path(base_path())->run(['bash', $this->getScriptPath(), '--' . $this->argument('bump')]);
+        $process = Process::path(base_path())->run(['bash', $this->getScriptPath(), '--' . $this->argument('type')]);
 
         $this->info($process->output());
 
