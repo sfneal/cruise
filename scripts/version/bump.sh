@@ -35,6 +35,3 @@ perl -pi -e "s/${VERSION}/${BUMP}/g" ./docker-compose.yml
 perl -pi -e "s/${VERSION}/${BUMP}/g" ./docker-compose-dev.yml
 perl -pi -e "s/${VERSION}/${BUMP}/g" ./docker-compose-dev-db.yml
 perl -pi -e "s/${VERSION}/${BUMP}/g" ./docker-compose-dev-node.yml
-
-# Commit to git
-git commit -m "${message}" ./version.txt ./docker-compose.yml ./docker-compose-dev.yml ./docker-compose-dev-db.yml ./docker-compose-dev-node.yml

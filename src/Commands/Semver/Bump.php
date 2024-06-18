@@ -17,7 +17,8 @@ class Bump extends Command implements PromptsForMissingInput
      * @var string
      */
     protected $signature = 'bump
-                            {type : major, minor or patch version bump}';
+                            {type : major, minor or patch version bump}
+                            {--commit : commit the updated version files to git}';
 
     /**
      * The console command description.
@@ -31,11 +32,35 @@ class Bump extends Command implements PromptsForMissingInput
      */
     public function handle(): int
     {
-        $process = Process::path(base_path())->run(['bash', $this->getScriptPath(), '--' . $this->argument('type')]);
+        // Run bump command
+        $bumpProcess = Process::path(base_path())->run([
+            'bash', $this->getScriptPath('bump.sh'),
+            '--' . $this->argument('type')
+        ]);
 
-        $this->info($process->output());
+        /// Display output in the console
+        $message = $bumpProcess->output();
+        $this->info($message);
 
-        return $process->exitCode();
+        // Exit process if bump failed or the 'commit' option is NOT enabled
+        if ($bumpProcess->failed() || ! $this->option('commit')) {
+            $this->info('No commit');
+            return $bumpProcess->exitCode();
+        }
+
+        $this->info('Yes commit');
+
+        // Run the commit process
+        $commitProcess = Process::path(base_path())->run([
+            'bash', $this->getScriptPath('commit.sh'),
+            $message
+        ]);
+
+        if ($commitProcess->failed()) {
+            return $commitProcess->exitCode();
+        }
+
+        return $bumpProcess->successful() && $commitProcess->successful() ? 1 : 0;
     }
 
     /**
@@ -55,13 +80,8 @@ class Bump extends Command implements PromptsForMissingInput
         ];
     }
 
-    private function getScriptPath(): string
+    private function getScriptPath(string $script): string
     {
-        $rel_path = 'scripts/version/bump.sh';
-        if (file_exists($rel_path)) {
-            return $rel_path;
-        }
-
-        return base_path('vendor/sfneal/cruise/' . $rel_path);
+        return base_path("vendor/sfneal/cruise/scripts/version/$script");
     }
 }
