@@ -6,6 +6,7 @@ use Illuminate\Support\ServiceProvider;
 use Sfneal\Cruise\Commands\Bump;
 use Sfneal\Cruise\Commands\CruiseInstall;
 use Sfneal\Cruise\Commands\MigrateDbInProduction;
+use Sfneal\Cruise\Commands\Version;
 use Sfneal\Cruise\Commands\WaitForDb;
 
 class CruiseServiceProvider extends ServiceProvider
@@ -29,6 +30,7 @@ class CruiseServiceProvider extends ServiceProvider
 
                 // Semver bump commands
                 Bump::class,
+                Version::class,
 
                 // Install command
                 CruiseInstall::class,
