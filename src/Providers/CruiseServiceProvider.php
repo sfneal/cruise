@@ -26,9 +26,9 @@ class CruiseServiceProvider extends ServiceProvider
 
                 // Semver bump commands
                 Bump::class,
-                BumpMajor::class,
-                BumpMinor::class,
-                BumpPatch::class,
+//                BumpMajor::class,
+//                BumpMinor::class,
+//                BumpPatch::class,
 
                 // Install command
                 CruiseInstall::class,

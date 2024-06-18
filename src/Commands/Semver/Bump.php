@@ -2,10 +2,9 @@
 
 namespace Sfneal\Cruise\Commands\Semver;
 
-use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Console\PromptsForMissingInput;
-use Symfony\Component\Process\Process;
+use Illuminate\Support\Facades\Process;
 
 class Bump extends Command implements PromptsForMissingInput
 {
@@ -28,7 +27,11 @@ class Bump extends Command implements PromptsForMissingInput
      */
     public function handle(): int
     {
-        return (new Process(['bash', 'scripts/version/bump.sh', '--' . $this->option('bump')]))->run();
+        $process = Process::path(base_path())->run(['bash', $this->getScriptPath(), '--' . $this->argument('bump')]);
+
+        $this->info($process->output());
+
+        return $process->exitCode();
     }
 
     /**
@@ -41,5 +44,15 @@ class Bump extends Command implements PromptsForMissingInput
         return [
             'bump' => ['Which semver segment would you like to bump?', 'E.g. major, minor or patch'],
         ];
+    }
+
+    private function getScriptPath(): string
+    {
+        $rel_path = 'scripts/version/bump.sh';
+        if (file_exists($rel_path)) {
+            return $rel_path;
+        }
+
+        return base_path('vendor/sfneal/cruise/' . $rel_path);
     }
 }

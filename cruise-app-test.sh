@@ -21,4 +21,4 @@ composer require "sfneal/cruise dev-${CRUISE_BRANCH}"
 
 php artisan cruise:install
 
-composer start-test
+# composer start-test
