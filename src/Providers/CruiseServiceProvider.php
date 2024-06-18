@@ -3,13 +3,10 @@
 namespace Sfneal\Cruise\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Sfneal\Cruise\Commands\Bump;
 use Sfneal\Cruise\Commands\CruiseInstall;
-use Sfneal\Cruise\Commands\Database\MigrateDbInProduction;
-use Sfneal\Cruise\Commands\Database\WaitForDb;
-use Sfneal\Cruise\Commands\Semver\Bump;
-use Sfneal\Cruise\Commands\Semver\BumpMajor;
-use Sfneal\Cruise\Commands\Semver\BumpMinor;
-use Sfneal\Cruise\Commands\Semver\BumpPatch;
+use Sfneal\Cruise\Commands\MigrateDbInProduction;
+use Sfneal\Cruise\Commands\WaitForDb;
 
 class CruiseServiceProvider extends ServiceProvider
 {
@@ -18,6 +15,12 @@ class CruiseServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Publish config file
+        $this->publishes([
+            __DIR__.'/../../config/cruise.php' => config_path('cruise.php'),
+        ], ['config', 'cruise-config']);
+
+        // Load commands
         if ($this->app->runningInConsole()) {
             $this->commands([
                 // DB commands
@@ -26,9 +29,6 @@ class CruiseServiceProvider extends ServiceProvider
 
                 // Semver bump commands
                 Bump::class,
-                BumpMajor::class,
-                BumpMinor::class,
-                BumpPatch::class,
 
                 // Install command
                 CruiseInstall::class,
@@ -56,6 +56,7 @@ class CruiseServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-
+        // Load config file
+        $this->mergeConfigFrom(__DIR__.'/../../config/cruise.php', 'cruise');
     }
 }

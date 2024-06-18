@@ -1,6 +1,6 @@
 <?php
 
-namespace Sfneal\Cruise\Commands\Database;
+namespace Sfneal\Cruise\Commands;
 
 use Exception;
 use Illuminate\Console\Command;
