@@ -13,7 +13,8 @@ class Bump extends Command implements PromptsForMissingInput
      *
      * @var string
      */
-    protected $signature = 'bump {bump=patch}';
+    protected $signature = 'bump
+                            {type : major, minor or patch version bump}';
 
     /**
      * The console command description.
