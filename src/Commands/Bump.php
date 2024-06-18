@@ -110,12 +110,16 @@ class Bump extends Command implements PromptsForMissingInput
 
     private function isCommitEnabled(): bool
     {
-        return $this->option('commit') || ! $this->option('no-commit');
+        if ($this->option('no-commit')) {
+            return false;
+        }
+
+        return $this->option('commit') || config('cruise.bump.auto-commit');
     }
 
     private function isCommitDisabled(): bool
     {
-        return ! $this->option('commit') || $this->option('no-commit');
+        return ! $this->isCommitEnabled();
     }
 
     private function displaySemverOptions(): void
