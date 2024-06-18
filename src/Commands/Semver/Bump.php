@@ -18,7 +18,8 @@ class Bump extends Command implements PromptsForMissingInput
      */
     protected $signature = 'bump
                             {type : major, minor or patch version bump}
-                            {--commit : commit the updated version files to git}';
+                            {--commit : commit the updated version files to git}
+                            {--no-commit : disabling commiting the updated version files}';
 
     /**
      * The console command description.
@@ -43,12 +44,9 @@ class Bump extends Command implements PromptsForMissingInput
         $this->info($message);
 
         // Exit process if bump failed or the 'commit' option is NOT enabled
-        if ($bumpProcess->failed() || ! $this->option('commit')) {
-            $this->info('No commit');
+        if ($bumpProcess->failed() || $this->isCommitDisabled()) {
             return $bumpProcess->exitCode();
         }
-
-        $this->info('Yes commit');
 
         // Run the commit process
         $commitProcess = Process::path(base_path())->run([
@@ -83,5 +81,15 @@ class Bump extends Command implements PromptsForMissingInput
     private function getScriptPath(string $script): string
     {
         return base_path("vendor/sfneal/cruise/scripts/version/$script");
+    }
+
+    private function isCommitEnabled(): bool
+    {
+        return $this->option('commit') || ! $this->option('no-commit');
+    }
+
+    private function isCommitDisabled(): bool
+    {
+        return ! $this->option('commit') || $this->option('no-commit');
     }
 }
