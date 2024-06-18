@@ -49,7 +49,7 @@ class Bump extends Command implements PromptsForMissingInput
             'type' => fn () => select(
                 label: 'Which semver segment would you like to bump?',
                 options: self::TYPES,
-                default: 'path',
+                default: 'patch',
                 hint: 'E.g. major, minor or patch',
             ),
         ];
