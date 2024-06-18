@@ -15,6 +15,12 @@ class CruiseServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Publish config file
+        $this->publishes([
+            __DIR__.'/../../config/cruise.php' => config_path('cruise.php'),
+        ], 'config');
+
+        // Load commands
         if ($this->app->runningInConsole()) {
             $this->commands([
                 // DB commands
@@ -50,6 +56,7 @@ class CruiseServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-
+        // Load config file
+        $this->mergeConfigFrom(__DIR__.'/../../config/cruise.php', 'cruise');
     }
 }

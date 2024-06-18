@@ -50,6 +50,9 @@ class CruiseInstall extends Command
             $this->info("Published missing .env.dev.db file");
         }
 
+        Artisan::call('vendor:publish --provider=Sfneal\Cruise\Providers\CruiseServiceProvider --tag=config');
+        $this->info("Published cruise config files config/cruise.php");
+
         return 0;
     }
 
