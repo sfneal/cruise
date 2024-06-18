@@ -18,7 +18,7 @@ class CruiseServiceProvider extends ServiceProvider
         // Publish config file
         $this->publishes([
             __DIR__.'/../../config/cruise.php' => config_path('cruise.php'),
-        ], 'config');
+        ], ['config', 'cruise-config']);
 
         // Load commands
         if ($this->app->runningInConsole()) {

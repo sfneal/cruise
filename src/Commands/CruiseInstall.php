@@ -7,6 +7,7 @@ use Illuminate\Console\Command;
 use Illuminate\Console\Events\ArtisanStarting;
 use Illuminate\Contracts\Console\PromptsForMissingInput;
 use Illuminate\Support\Facades\Artisan;
+use Sfneal\Cruise\Providers\CruiseServiceProvider;
 use Symfony\Component\Process\Process;
 
 class CruiseInstall extends Command
@@ -30,7 +31,7 @@ class CruiseInstall extends Command
      */
     public function handle(): int
     {
-        Artisan::call('vendor:publish --tag=docker');
+        Artisan::call('vendor:publish', ['--tag' => 'docker']);
         $this->info("Published docker assets to the application root");
 
         $this->addComposerScript('start-dev');
@@ -50,7 +51,7 @@ class CruiseInstall extends Command
             $this->info("Published missing .env.dev.db file");
         }
 
-        Artisan::call('vendor:publish --provider=Sfneal\Cruise\Providers\CruiseServiceProvider --tag=config');
+        Artisan::call('vendor:publish', ['--tag' => 'cruise-config']);
         $this->info("Published cruise config files config/cruise.php");
 
         return 0;
