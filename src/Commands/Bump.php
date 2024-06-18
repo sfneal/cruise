@@ -5,7 +5,7 @@ namespace Sfneal\Cruise\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Console\PromptsForMissingInput;
 use Illuminate\Support\Facades\Process;
-use Sfneal\Helpers\Laravel\AppInfo;
+
 use function Laravel\Prompts\select;
 
 class Bump extends Command implements PromptsForMissingInput
@@ -30,7 +30,7 @@ class Bump extends Command implements PromptsForMissingInput
     protected $description = 'Bump the application to the next major, minor or patch version';
 
     /**
-     * The current application version
+     * The current application version.
      *
      * @var string
      */
@@ -56,7 +56,7 @@ class Bump extends Command implements PromptsForMissingInput
         // Run bump command
         $bumpProcess = Process::path(base_path())->run([
             'bash', $this->getScriptPath('bump.sh'),
-            '--' . $this->argument('type')
+            '--'.$this->argument('type'),
         ]);
 
         /// Display output in the console
@@ -72,7 +72,7 @@ class Bump extends Command implements PromptsForMissingInput
             // Run the commit process
             $commitProcess = Process::path(base_path())->run([
                 'bash', $this->getScriptPath('commit.sh'),
-                $message
+                $message,
             ]);
 
             if ($commitProcess->failed()) {
@@ -91,7 +91,7 @@ class Bump extends Command implements PromptsForMissingInput
     protected function promptForMissingArgumentsUsing(): array
     {
         return [
-            'type' => function() {
+            'type' => function () {
                 // Display table with bump options
                 $this->displaySemverOptions();
 
@@ -131,15 +131,14 @@ class Bump extends Command implements PromptsForMissingInput
         foreach (self::TYPES as $type) {
             $process = Process::path(base_path())->run([
                 'bash', $this->getScriptPath('semver.sh'),
-                "--$type"
+                "--$type",
             ]);
 
             $data[] = [
                 'type' => ucwords($type),
                 'old' => $this->version,
-                'new' => trim($process->output())
+                'new' => trim($process->output()),
             ];
-
         }
 
         $this->table(['Type', 'Old', 'New'], $data);

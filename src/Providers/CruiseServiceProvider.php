@@ -12,7 +12,7 @@ use Sfneal\Cruise\Commands\WaitForDb;
 class CruiseServiceProvider extends ServiceProvider
 {
     /**
-     * Bootstrap any Users services
+     * Bootstrap any Users services.
      */
     public function boot(): void
     {

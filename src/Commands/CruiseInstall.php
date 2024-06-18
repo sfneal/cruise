@@ -2,12 +2,8 @@
 
 namespace Sfneal\Cruise\Commands;
 
-use Exception;
 use Illuminate\Console\Command;
-use Illuminate\Console\Events\ArtisanStarting;
-use Illuminate\Contracts\Console\PromptsForMissingInput;
 use Illuminate\Support\Facades\Artisan;
-use Sfneal\Cruise\Providers\CruiseServiceProvider;
 use Symfony\Component\Process\Process;
 
 class CruiseInstall extends Command
@@ -32,7 +28,7 @@ class CruiseInstall extends Command
     public function handle(): int
     {
         Artisan::call('vendor:publish', ['--tag' => 'docker']);
-        $this->info("Published docker assets to the application root");
+        $this->info('Published docker assets to the application root');
 
         $this->addComposerScript('start-dev');
         $this->addComposerScript('start-dev-db');
@@ -40,19 +36,19 @@ class CruiseInstall extends Command
         $this->addComposerScript('start-test');
         $this->addComposerScript('stop');
         $this->addComposerScript('build');
-        $this->info("Published composer scripts for starting/stopping docker services");
+        $this->info('Published composer scripts for starting/stopping docker services');
 
         if (! file_exists(base_path('.env.dev')) && file_exists(base_path('.env'))) {
             copy(base_path('.env'), base_path('.env.dev'));
-            $this->info("Published missing .env.dev file");
+            $this->info('Published missing .env.dev file');
         }
         if (! file_exists(base_path('.env.dev.db')) && file_exists(base_path('.env'))) {
             copy(base_path('.env.dev'), base_path('.env.dev.db'));
-            $this->info("Published missing .env.dev.db file");
+            $this->info('Published missing .env.dev.db file');
         }
 
         Artisan::call('vendor:publish', ['--tag' => 'cruise-config']);
-        $this->info("Published cruise config files config/cruise.php");
+        $this->info('Published cruise config files config/cruise.php');
 
         return 0;
     }
