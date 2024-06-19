@@ -21,3 +21,6 @@ docker compose -f docker-compose-dev-db.yml build
 
 # Start fresh container instances
 docker compose -f docker-compose-dev-db.yml up -d
+
+docker exec -it app php artisan db:wait
+docker exec -it app php artisan migrate --seed --force
