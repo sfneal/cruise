@@ -4,8 +4,6 @@ namespace Sfneal\Cruise\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Console\PromptsForMissingInput;
-use Illuminate\Support\Facades\Process;
-use function Laravel\Prompts\select;
 
 class Version extends Command implements PromptsForMissingInput
 {
@@ -28,7 +26,7 @@ class Version extends Command implements PromptsForMissingInput
      */
     public function handle(): int
     {
-        $this->info('v' . self::get());
+        $this->info('v'.self::get());
 
         return self::SUCCESS;
     }
