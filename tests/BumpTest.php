@@ -11,14 +11,14 @@ class BumpTest extends TestCase
 
     private function copyDirectory(string $source, string $destination): void
     {
-        if (!is_dir($destination)) {
+        if (! is_dir($destination)) {
             mkdir($destination, 0755, true);
         }
         $files = scandir($source);
         foreach ($files as $file) {
             if ($file !== '.' && $file !== '..') {
-                $sourceFile = $source . '/' . $file;
-                $destinationFile = $destination . '/' . $file;
+                $sourceFile = $source.'/'.$file;
+                $destinationFile = $destination.'/'.$file;
                 if (is_dir($sourceFile)) {
                     $this->copyDirectory($sourceFile, $destinationFile);
                 } else {
@@ -31,7 +31,7 @@ class BumpTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->copyDirectory(__DIR__ . '/../docker/services', __DIR__ . '/../');
+        $this->copyDirectory(__DIR__.'/../docker/services', __DIR__.'/../');
     }
 
     protected function tearDown(): void
