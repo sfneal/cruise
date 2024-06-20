@@ -1,5 +1,15 @@
 #!/usr/bin/env bash
 
+# Parse command arguments
+while :; do
+    case $1 in
+        -r|--run) run_tests=true
+        ;;
+        *) break
+    esac
+    shift
+done
+
 BRANCH="default"
 
 # Export Docker image Tag
@@ -27,4 +37,6 @@ docker exec app php artisan db:wait
 docker exec app php artisan migrate --seed
 
 # Run phpunit inside Docker 'app' container
-docker exec app ./vendor/bin/phpunit
+if [[ "$run_tests" == true ]]; then
+    docker exec app ./vendor/bin/phpunit
+fi
