@@ -37,7 +37,7 @@ class WaitForDb extends Command
         foreach (range(1, $this->option('max-attempts')) as $attempt) {
             try {
                 DB::connection()->getPdo();
-                $time = now()->diffInSeconds($start);
+                $time = abs(now()->diffInSeconds($start));
                 $this->info("Took {$time} seconds to connect to the DB.");
 
                 return 0;
