@@ -36,12 +36,12 @@ class TestCase extends OrchestraTestCase
     {
         parent::setUp();
 
-        $this->artisan('cruise:install')->execute();
+        $this->artisan('cruise:install');
     }
 
     protected function tearDown(): void
     {
-        $this->artisan('cruise:uninstall')->execute();
+        $this->artisan('cruise:uninstall');
 
         parent::tearDown();
     }
