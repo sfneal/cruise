@@ -69,7 +69,7 @@ class CruiseUninstall extends Command
 
     private function removeComposerScript(string $script): void
     {
-        (new Process(['composer', 'config', '--unset', "scripts.$script"]))->run();
+        (new Process(['composer', 'config', '--unset', "scripts.$script", '--working-dir='.base_path()]))->run();
 
         $this->info("Removed 'composer $script' command to composer.json");
     }
