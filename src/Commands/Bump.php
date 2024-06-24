@@ -37,22 +37,12 @@ class Bump extends Command implements PromptsForMissingInput
     protected string $version;
 
     /**
-     * Create a new console command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-
-        $this->version = Version::get();
-    }
-
-    /**
      * Execute the console command.
      */
     public function handle(): int
     {
+        $this->version = Version::get();
+
         // Run bump command
         $bumpProcess = Process::path(base_path())->run([
             'bash', $this->getScriptPath('bump.sh'),
