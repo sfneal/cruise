@@ -5,7 +5,6 @@ namespace Sfneal\Cruise\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Console\PromptsForMissingInput;
 use Illuminate\Support\Facades\Process;
-
 use function Laravel\Prompts\select;
 
 class Bump extends Command implements PromptsForMissingInput
@@ -32,9 +31,9 @@ class Bump extends Command implements PromptsForMissingInput
     /**
      * The current application version.
      *
-     * @var string
+     * @var string|null
      */
-    protected string $version;
+    protected ?string $version = null;
 
     /**
      * Execute the console command.
@@ -49,9 +48,8 @@ class Bump extends Command implements PromptsForMissingInput
             '--'.$this->argument('type'),
         ]);
 
-        /// Display output in the console
+        // Display output in the console
         $message = $bumpProcess->output();
-        $this->info($message);
 
         // Exit process if bump failed or the 'commit' option is NOT enabled
         if ($bumpProcess->failed()) {
@@ -69,6 +67,8 @@ class Bump extends Command implements PromptsForMissingInput
                 return $commitProcess->exitCode();
             }
         }
+
+        $this->info($message);
 
         return self::SUCCESS;
     }
