@@ -3,7 +3,6 @@
 namespace Sfneal\Cruise\Tests\Feature;
 
 use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\File;
 use PHPUnit\Framework\Attributes\Test;
 use Sfneal\Cruise\Commands\Bump;
 use Sfneal\Cruise\Tests\TestCase;
@@ -63,7 +62,7 @@ class BumpTest extends TestCase
         $this->assertStringContainsString('major', $output);
         $this->assertStringContainsString('1.0.0', $output);
         $this->assertStringContainsString('0.1.0 --> 1.0.0', $output);
-        $this->assertEquals("BUMP major version (0.1.0 --> 1.0.0)", trim($output));
+        $this->assertEquals('BUMP major version (0.1.0 --> 1.0.0)', trim($output));
     }
 
     #[Test]
@@ -79,7 +78,7 @@ class BumpTest extends TestCase
         $this->assertStringContainsString('minor', $output);
         $this->assertStringContainsString('0.2.0', $output);
         $this->assertStringContainsString('0.1.0 --> 0.2.0', $output);
-        $this->assertEquals("BUMP minor version (0.1.0 --> 0.2.0)", trim($output));
+        $this->assertEquals('BUMP minor version (0.1.0 --> 0.2.0)', trim($output));
     }
 
     #[Test]
@@ -95,7 +94,7 @@ class BumpTest extends TestCase
         $this->assertStringContainsString('patch', $output);
         $this->assertStringContainsString('0.1.1', $output);
         $this->assertStringContainsString('0.1.0 --> 0.1.1', $output);
-        $this->assertEquals("BUMP patch version (0.1.0 --> 0.1.1)", trim($output));
+        $this->assertEquals('BUMP patch version (0.1.0 --> 0.1.1)', trim($output));
     }
 
     #[Test]
