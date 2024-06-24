@@ -27,8 +27,6 @@ class CruiseInstall extends Command
      */
     public function handle(): int
     {
-        $this->info($this->ansi());
-
         Artisan::call('vendor:publish', ['--tag' => 'cruise-config']);
         $this->info('Published cruise config files config/cruise.php');
 
@@ -62,16 +60,5 @@ class CruiseInstall extends Command
         (new Process(['composer', 'config', "scripts.$script", "sh $script_path/$script.sh", '--working-dir='.base_path()]))->run();
 
         $this->info("Added 'composer $script' command to composer.json");
-    }
-
-    private function ansi(): string
-    {
-        return "
-         ██████╗██████╗ ██╗   ██╗██╗███████╗███████╗    ██╗███╗   ██╗███████╗████████╗ █████╗ ██╗     ██╗     ███████╗██████╗
-        ██╔════╝██╔══██╗██║   ██║██║██╔════╝██╔════╝    ██║████╗  ██║██╔════╝╚══██╔══╝██╔══██╗██║     ██║     ██╔════╝██╔══██╗
-        ██║     ██████╔╝██║   ██║██║███████╗█████╗      ██║██╔██╗ ██║███████╗   ██║   ███████║██║     ██║     █████╗  ██████╔╝
-        ██║     ██╔══██╗██║   ██║██║╚════██║██╔══╝      ██║██║╚██╗██║╚════██║   ██║   ██╔══██║██║     ██║     ██╔══╝  ██╔══██╗
-        ╚██████╗██║  ██║╚██████╔╝██║███████║███████╗    ██║██║ ╚████║███████║   ██║   ██║  ██║███████╗███████╗███████╗██║  ██║
-         ╚═════╝╚═╝  ╚═╝ ╚═════╝ ╚═╝╚══════╝╚══════╝    ╚═╝╚═╝  ╚═══╝╚══════╝   ╚═╝   ╚═╝  ╚═╝╚══════╝╚══════╝╚══════╝╚═╝  ╚═╝";
     }
 }
