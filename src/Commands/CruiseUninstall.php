@@ -72,7 +72,7 @@ class CruiseUninstall extends Command
     {
         $script_path = 'vendor/sfneal/cruise/scripts/runners';
 
-        (new Process(['composer', 'config', '--unset', "scripts.$script", "sh $script_path/$script.sh"]))->run();
+        (new Process(['composer', 'config', '--unset', "scripts.$script"]))->run();
 
         $this->info("Removed 'composer $script' command to composer.json");
     }
