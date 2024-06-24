@@ -12,7 +12,8 @@ class Version extends Command implements PromptsForMissingInput
      *
      * @var string
      */
-    protected $signature = 'version';
+    protected $signature = 'version
+                            {--path= : The path to version.txt file}';
 
     /**
      * The console command description.
@@ -26,13 +27,13 @@ class Version extends Command implements PromptsForMissingInput
      */
     public function handle(): int
     {
-        $this->info('v'.self::get());
+        $this->info('v'.self::get($this->option('path')));
 
         return self::SUCCESS;
     }
 
-    public static function get(): string
+    public static function get(?string $path = null): string
     {
-        return file_get_contents(base_path('version.txt'));
+        return file_get_contents($path ?? base_path('version.txt'));
     }
 }
