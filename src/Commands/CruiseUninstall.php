@@ -65,16 +65,6 @@ class CruiseUninstall extends Command
         $this->removeComposerScript('build');
         $this->info('Removed composer scripts for starting/stopping docker services');
 
-        // Remove copied .env files
-        if (file_exists(base_path('.env.dev'))) {
-            unlink(file_exists(base_path('.env.dev')));
-            $this->info('Removed .env.dev file');
-        }
-        if (file_exists(base_path('.env.dev.db'))) {
-            unlink(file_exists(base_path('.env.dev.db')));
-            $this->info('Removed .env.dev.db file');
-        }
-
         return self::SUCCESS;
     }
 
