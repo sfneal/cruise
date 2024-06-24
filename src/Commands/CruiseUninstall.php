@@ -70,8 +70,6 @@ class CruiseUninstall extends Command
 
     private function removeComposerScript(string $script): void
     {
-        $script_path = 'vendor/sfneal/cruise/scripts/runners';
-
         (new Process(['composer', 'config', '--unset', "scripts.$script"]))->run();
 
         $this->info("Removed 'composer $script' command to composer.json");
