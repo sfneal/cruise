@@ -27,6 +27,9 @@ class CruiseInstall extends Command
      */
     public function handle(): int
     {
+        Artisan::call('vendor:publish', ['--tag' => 'cruise-config']);
+        $this->info('Published cruise config files config/cruise.php');
+
         Artisan::call('vendor:publish', ['--tag' => 'docker']);
         $this->info('Published docker assets to the application root');
 
@@ -47,10 +50,7 @@ class CruiseInstall extends Command
             $this->info('Published missing .env.dev.db file');
         }
 
-        Artisan::call('vendor:publish', ['--tag' => 'cruise-config']);
-        $this->info('Published cruise config files config/cruise.php');
-
-        return 0;
+        return self::SUCCESS;
     }
 
     private function addComposerScript(string $script): void
