@@ -27,6 +27,12 @@ class Version extends Command implements PromptsForMissingInput
      */
     public function handle(): int
     {
+        $path = $this->option('path') ?? base_path('version.txt');
+
+        if (! file_exists($path)) {
+            return self::FAILURE;
+        }
+
         $this->info('v'.self::get($this->option('path')));
 
         return self::SUCCESS;
