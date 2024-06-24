@@ -24,6 +24,8 @@ VERSION="$(head -n 1 version.txt)"
 # https://github.com/fsaintjacques/semver-tool
 BUMP="$(${DIR}/semver bump ${type} ${VERSION})"
 
+chmod +x "${DIR}/semver"
+
 message="BUMP ${type} version (${VERSION} --> ${BUMP})"
 
 echo "${message}"

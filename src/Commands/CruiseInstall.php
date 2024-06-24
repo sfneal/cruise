@@ -57,7 +57,7 @@ class CruiseInstall extends Command
     {
         $script_path = 'vendor/sfneal/cruise/scripts/runners';
 
-        (new Process(['composer', 'config', "scripts.$script", "sh $script_path/$script.sh"]))->run();
+        (new Process(['composer', 'config', "scripts.$script", "sh $script_path/$script.sh", '--working-dir='.base_path()]))->run();
 
         $this->info("Added 'composer $script' command to composer.json");
     }

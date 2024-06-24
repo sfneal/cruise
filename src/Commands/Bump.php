@@ -32,36 +32,25 @@ class Bump extends Command implements PromptsForMissingInput
     /**
      * The current application version.
      *
-     * @var string
+     * @var string|null
      */
-    protected string $version;
-
-    /**
-     * Create a new console command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-
-        $this->version = Version::get();
-    }
+    protected ?string $version = null;
 
     /**
      * Execute the console command.
      */
     public function handle(): int
     {
+        $this->version = Version::get();
+
         // Run bump command
         $bumpProcess = Process::path(base_path())->run([
             'bash', $this->getScriptPath('bump.sh'),
             '--'.$this->argument('type'),
         ]);
 
-        /// Display output in the console
+        // Display output in the console
         $message = $bumpProcess->output();
-        $this->info($message);
 
         // Exit process if bump failed or the 'commit' option is NOT enabled
         if ($bumpProcess->failed()) {
@@ -79,6 +68,8 @@ class Bump extends Command implements PromptsForMissingInput
                 return $commitProcess->exitCode();
             }
         }
+
+        $this->info($message);
 
         return self::SUCCESS;
     }
