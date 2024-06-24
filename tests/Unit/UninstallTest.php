@@ -12,7 +12,7 @@ class UninstallTest extends TestCase
     protected bool $shouldUninstall = false;
 
     #[Test]
-    function removes_the_configuration()
+    public function removes_the_configuration()
     {
         $this->assertTrue(File::exists(config_path('cruise.php')));
 
@@ -25,11 +25,11 @@ class UninstallTest extends TestCase
     public function removes_docker_assets()
     {
         // Get list of docker asset files
-        $directory = __DIR__ . '/../../docker/services';
+        $directory = __DIR__.'/../../docker/services';
         $files = [];
         foreach (scandir($directory) as $file) {
             if ($file !== '.' && $file !== '..') {
-                $files[] = $directory . '/' . $file;
+                $files[] = $directory.'/'.$file;
             }
         }
 
@@ -62,7 +62,7 @@ class UninstallTest extends TestCase
         // Confirm no scripts are added prior to cruise installation
         $pre_install = json_decode(file_get_contents(base_path('composer.json')), true);
         $this->assertNotEmpty($pre_install['scripts']);
-        foreach($expected_scripts as $script_k => $script_v) {
+        foreach ($expected_scripts as $script_k => $script_v) {
             $this->assertArrayHasKey($script_k, $pre_install['scripts']);
             $this->assertEquals($pre_install['scripts'][$script_k], $script_v);
         }

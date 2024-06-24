@@ -32,7 +32,6 @@ class TestCase extends OrchestraTestCase
      */
     protected function getEnvironmentSetUp($app)
     {
-
     }
 
     protected function setUp(): void

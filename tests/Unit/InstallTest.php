@@ -12,7 +12,7 @@ class InstallTest extends TestCase
     protected bool $shouldInstall = false;
 
     #[Test]
-    function copies_the_configuration()
+    public function copies_the_configuration()
     {
         // make sure we're starting from a clean state
         if (File::exists(config_path('cruise.php'))) {
@@ -30,11 +30,11 @@ class InstallTest extends TestCase
     public function copies_docker_assets()
     {
         // Get list of docker asset files
-        $directory = __DIR__ . '/../../docker/services';
+        $directory = __DIR__.'/../../docker/services';
         $files = [];
         foreach (scandir($directory) as $file) {
             if ($file !== '.' && $file !== '..') {
-                $files[] = $directory . '/' . $file;
+                $files[] = $directory.'/'.$file;
             }
         }
 
@@ -73,7 +73,7 @@ class InstallTest extends TestCase
         // Confirm scripts added after installation
         $post_install = json_decode(file_get_contents(base_path('composer.json')), true);
         $this->assertNotEmpty($post_install['scripts']);
-        foreach($expected_scripts as $script_k => $script_v) {
+        foreach ($expected_scripts as $script_k => $script_v) {
             $this->assertArrayHasKey($script_k, $post_install['scripts']);
             $this->assertEquals($post_install['scripts'][$script_k], $script_v);
         }
