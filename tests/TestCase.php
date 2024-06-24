@@ -8,6 +8,9 @@ use Sfneal\Cruise\Providers\CruiseServiceProvider;
 
 class TestCase extends OrchestraTestCase
 {
+    protected bool $shouldInstall = true;
+    protected bool $shouldUninstall = true;
+
     /**
      * Get package providers.
      *
@@ -36,12 +39,16 @@ class TestCase extends OrchestraTestCase
     {
         parent::setUp();
 
-        $this->artisan('cruise:install');
+        if ($this->shouldInstall) {
+            $this->artisan('cruise:install');
+        }
     }
 
     protected function tearDown(): void
     {
-        $this->artisan('cruise:uninstall');
+        if ($this->shouldUninstall) {
+            $this->artisan('cruise:uninstall');
+        }
 
         parent::tearDown();
     }
