@@ -10,7 +10,6 @@ use Sfneal\Cruise\Tests\TestCase;
 class InstallTest extends TestCase
 {
     protected bool $shouldInstall = false;
-    protected bool $shouldUninstall = false;
 
     #[Test]
     function copies_the_configuration()
