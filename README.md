@@ -2,8 +2,9 @@
 
 [![Packagist PHP support](https://img.shields.io/packagist/php-v/sfneal/cruise)](https://packagist.org/packages/sfneal/cruise)
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/sfneal/cruise.svg?style=flat-square)](https://packagist.org/packages/sfneal/cruise)
-[![Build Status](https://travis-ci.com/sfneal/cruise.svg?branch=master&style=flat-square)](https://travis-ci.com/sfneal/cruise)
-[![Quality Score](https://img.shields.io/scrutinizer/g/sfneal/cruise.svg?style=flat-square)](https://scrutinizer-ci.com/g/sfneal/cruise)
+[![Test Suite](https://github.com/sfneal/cruise/actions/workflows/tests.yml/badge.svg)](https://github.com/sfneal/cruise/actions/workflows/tests.yml)
+[![Static Analysis](https://github.com/sfneal/cruise/actions/workflows/static-analysis.yml/badge.svg)](https://github.com/sfneal/cruise/actions/workflows/static-analysis.yml)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/sfneal/cruise/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/sfneal/cruise/?branch=master)
 [![Total Downloads](https://img.shields.io/packagist/dt/sfneal/cruise.svg?style=flat-square)](https://packagist.org/packages/sfneal/cruise)
 
 Cruise is a Laravel Sail inspired CLI for managing Docker services
@@ -16,11 +17,44 @@ You can install the package via composer:
 composer require sfneal/cruise
 ```
 
+Run the cruise _**install**_ command to publish cruise assets.
+
+This will add Dockerfiles, docker compose configs & other docker assets to your application root.
+
+```bash
+php artsian cruise:install
+```
+
+Run the cruise _**uninstall**_ command to remove published cruise assets
+
+```bash
+php artsian cruise:uninstall
+```
+
 ## Usage
 
-``` php
-// Usage description here
-```
+Once the `php artsian cruise:install` command has been run you will have access to various command and utilities for running & testing your laravel application
+
+### Artisan commands
+
+| Syntax                     | Description                                                                             |
+|----------------------------|-----------------------------------------------------------------------------------------|
+| `php artisan bump`         | Bump your application to the next major, minor or patch version                         |
+| `php artisan version`      | Display your application current version                                                |
+| `php artisan migrate:prod` | Run database migrations only when your application env is 'production'                  |
+| `php artisan db:wait`      | Application start up hook that allows you to wait for your database to become available |
+
+
+### Composer commands
+
+| Syntax                    | Description                                                                              |
+|---------------------------|------------------------------------------------------------------------------------------|
+| `composer build`          | Docker build your application (prod or dev)                                              |
+| `composer start-dev`      | Start docker services for your development environment                                   |
+| `composer start-dev-db`   | Start docker services for your development environment with a local database             |
+| `composer start-dev-node` | Start docker services for your development environment with a node webpack hot re-loader |
+| `composer start-test`     | Start docker services for testing your application (app, cache & db)                     |
+| `composer stop`           | Stop docker services & delete containers, volumes & networks                             |
 
 ### Testing
 
