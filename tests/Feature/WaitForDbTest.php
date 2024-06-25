@@ -2,9 +2,7 @@
 
 namespace Sfneal\Cruise\Tests\Feature;
 
-use Illuminate\Support\Facades\Config;
 use PHPUnit\Framework\Attributes\Test;
-use Sfneal\Cruise\Commands\MigrateDbInProduction;
 use Sfneal\Cruise\Tests\TestCase;
 
 class WaitForDbTest extends TestCase
