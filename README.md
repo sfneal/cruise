@@ -77,7 +77,6 @@ If you discover any security related issues, please email stephen.neal14@gmail.c
 ## Credits
 
 - [Stephen Neal](https://github.com/sfneal)
-- [All Contributors](../../contributors)
 
 ## License
 
