@@ -40,7 +40,7 @@ class WaitForDb extends Command
                 $time = abs(now()->diffInSeconds($start));
                 $this->info("Took {$time} seconds to connect to the DB.");
 
-                return 0;
+                return self::SUCCESS;
             } catch (Exception $exception) {
                 if ($attempt == $this->option('max-attempts')) {
                     throw $exception;
@@ -51,6 +51,6 @@ class WaitForDb extends Command
             }
         }
 
-        return 1;
+        return self::FAILURE;
     }
 }
