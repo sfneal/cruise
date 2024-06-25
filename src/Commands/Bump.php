@@ -45,7 +45,7 @@ class Bump extends Command implements PromptsForMissingInput
 
         // Run bump command
         $bumpProcess = Process::path(base_path())->run([
-            'bash', $this->getScriptPath('bump.sh'),
+            'bash', $this->getVersionScriptPath('bump.sh'),
             '--'.$this->argument('type'),
         ]);
 
@@ -60,7 +60,7 @@ class Bump extends Command implements PromptsForMissingInput
         if ($this->isCommitEnabled()) {
             // Run the commit process
             $commitProcess = Process::path(base_path())->run([
-                'bash', $this->getScriptPath('commit.sh'),
+                'bash', $this->getVersionScriptPath('commit.sh'),
                 $message,
             ]);
 
@@ -96,7 +96,7 @@ class Bump extends Command implements PromptsForMissingInput
         ];
     }
 
-    private function getScriptPath(string $script): string
+    private function getVersionScriptPath(string $script): string
     {
         return base_path("vendor/sfneal/cruise/scripts/version/$script");
     }
@@ -121,7 +121,7 @@ class Bump extends Command implements PromptsForMissingInput
 
         foreach (self::TYPES as $type) {
             $process = Process::path(base_path())->run([
-                'bash', $this->getScriptPath('semver.sh'),
+                'bash', $this->getVersionScriptPath('semver.sh'),
                 "--$type",
             ]);
 
