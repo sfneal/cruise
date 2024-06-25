@@ -8,6 +8,9 @@ use Sfneal\Helpers\Laravel\AppInfo;
 
 class MigrateDbInProduction extends Command
 {
+    public const SUCCESS_MESSAGE = "Running database migrations because the app env is 'production'.";
+    public const FAILURE_MESSAGE = "Skipped running database migrations because the app env is NOT 'production'.";
+
     /**
      * The name and signature of the console command.
      *
@@ -36,6 +39,6 @@ class MigrateDbInProduction extends Command
 
         $this->info("Skipped running database migrations because the app env is NOT 'production'.");
 
-        return self::SUCCESS;
+        return self::FAILURE;
     }
 }
