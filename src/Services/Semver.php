@@ -5,7 +5,6 @@ namespace Sfneal\Cruise\Services;
 use Illuminate\Support\Facades\Process;
 use Sfneal\Cruise\Utils\ScriptsPath;
 
-
 final class Semver
 {
     use ScriptsPath;
