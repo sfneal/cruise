@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Artisan;
 use PHPUnit\Framework\Attributes\Test;
 use Sfneal\Cruise\Commands\Bump;
 use Sfneal\Cruise\Tests\ScriptTestCase;
-use Sfneal\Cruise\Tests\TestCase;
 
 class BumpTest extends ScriptTestCase
 {

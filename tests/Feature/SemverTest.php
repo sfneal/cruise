@@ -6,7 +6,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use Sfneal\Cruise\Services\Semver;
 use Sfneal\Cruise\Tests\ScriptTestCase;
-use Sfneal\Cruise\Tests\TestCase;
 
 class SemverTest extends ScriptTestCase
 {
@@ -18,19 +17,19 @@ class SemverTest extends ScriptTestCase
         return [
             '0.1.0 --> 1.0.0' => [
                 'original' => '0.1.0',
-                'expected' => '1.0.0'
+                'expected' => '1.0.0',
             ],
             '0.8.2 --> 1.0.0' => [
                 'original' => '0.8.2',
-                'expected' => '1.0.0'
+                'expected' => '1.0.0',
             ],
             '1.5.9 --> 2.0.0' => [
                 'original' => '1.5.9',
-                'expected' => '2.0.0'
+                'expected' => '2.0.0',
             ],
             '7.4.0 --> 8.0.0' => [
                 'original' => '7.4.0',
-                'expected' => '8.0.0'
+                'expected' => '8.0.0',
             ],
         ];
     }
@@ -40,19 +39,19 @@ class SemverTest extends ScriptTestCase
         return [
             '0.1.0 --> 0.2.0' => [
                 'original' => '0.1.0',
-                'expected' => '0.2.0'
+                'expected' => '0.2.0',
             ],
             '0.8.2 --> 0.9.0' => [
                 'original' => '0.8.2',
-                'expected' => '0.9.0'
+                'expected' => '0.9.0',
             ],
             '1.5.9 --> 1.6.0' => [
                 'original' => '1.5.9',
-                'expected' => '1.6.0'
+                'expected' => '1.6.0',
             ],
             '7.4.0 --> 7.5.0' => [
                 'original' => '7.4.0',
-                'expected' => '7.5.0'
+                'expected' => '7.5.0',
             ],
         ];
     }
@@ -62,19 +61,19 @@ class SemverTest extends ScriptTestCase
         return [
             '0.1.0 --> 0.1.1' => [
                 'original' => '0.1.0',
-                'expected' => '0.1.1'
+                'expected' => '0.1.1',
             ],
             '0.8.2 --> 0.8.3' => [
                 'original' => '0.8.2',
-                'expected' => '0.8.3'
+                'expected' => '0.8.3',
             ],
             '1.5.9 --> 1.5.10' => [
                 'original' => '1.5.9',
-                'expected' => '1.5.10'
+                'expected' => '1.5.10',
             ],
             '7.4.0 --> 7.4.1' => [
                 'original' => '7.4.0',
-                'expected' => '7.4.1'
+                'expected' => '7.4.1',
             ],
         ];
     }
