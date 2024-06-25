@@ -5,7 +5,8 @@ namespace Sfneal\Cruise\Services;
 use Illuminate\Support\Facades\Process;
 use Sfneal\Cruise\Utils\ScriptsPath;
 
-class Semver
+
+final class Semver
 {
     use ScriptsPath;
 
@@ -18,7 +19,7 @@ class Semver
 
     public static function for(string $version): Semver
     {
-        return new static($version);
+        return new self($version);
     }
 
     public function major(): string
