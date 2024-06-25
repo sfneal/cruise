@@ -31,11 +31,11 @@ class MigrateDbInProduction extends Command
             $this->info("Running database migrations because the app env is 'production'.");
             Artisan::call('migrate --force');
 
-            return 0;
+            return self::SUCCESS;
         }
 
         $this->info("Skipped running database migrations because the app env is NOT 'production'.");
 
-        return 1;
+        return self::SUCCESS;
     }
 }
