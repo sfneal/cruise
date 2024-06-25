@@ -5,11 +5,14 @@ namespace Sfneal\Cruise\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Console\PromptsForMissingInput;
 use Illuminate\Support\Facades\Process;
+use Sfneal\Cruise\Utils\ScriptsPath;
 
 use function Laravel\Prompts\select;
 
 class Bump extends Command implements PromptsForMissingInput
 {
+    use ScriptsPath;
+
     const TYPES = ['major', 'minor', 'patch'];
 
     /**
@@ -45,7 +48,7 @@ class Bump extends Command implements PromptsForMissingInput
 
         // Run bump command
         $bumpProcess = Process::path(base_path())->run([
-            'bash', $this->getScriptPath('bump.sh'),
+            'bash', $this->getVersionScriptPath('bump.sh'),
             '--'.$this->argument('type'),
         ]);
 
@@ -60,7 +63,7 @@ class Bump extends Command implements PromptsForMissingInput
         if ($this->isCommitEnabled()) {
             // Run the commit process
             $commitProcess = Process::path(base_path())->run([
-                'bash', $this->getScriptPath('commit.sh'),
+                'bash', $this->getVersionScriptPath('commit.sh'),
                 $message,
             ]);
 
@@ -96,11 +99,6 @@ class Bump extends Command implements PromptsForMissingInput
         ];
     }
 
-    private function getScriptPath(string $script): string
-    {
-        return base_path("vendor/sfneal/cruise/scripts/version/$script");
-    }
-
     private function isCommitEnabled(): bool
     {
         if ($this->option('no-commit')) {
@@ -121,7 +119,7 @@ class Bump extends Command implements PromptsForMissingInput
 
         foreach (self::TYPES as $type) {
             $process = Process::path(base_path())->run([
-                'bash', $this->getScriptPath('semver.sh'),
+                'bash', $this->getVersionScriptPath('semver.sh'),
                 "--$type",
             ]);
 
