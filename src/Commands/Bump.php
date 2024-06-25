@@ -5,8 +5,8 @@ namespace Sfneal\Cruise\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Console\PromptsForMissingInput;
 use Illuminate\Support\Facades\Process;
-
 use Sfneal\Cruise\Utils\ScriptsPath;
+
 use function Laravel\Prompts\select;
 
 class Bump extends Command implements PromptsForMissingInput
