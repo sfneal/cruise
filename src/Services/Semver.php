@@ -44,7 +44,7 @@ final class Semver
                 $this->getVersionScriptPath('semver'),
                 'bump',
                 $type,
-                $this->version
+                $this->version,
             ])
             ->output());
     }
