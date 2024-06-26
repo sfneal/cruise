@@ -92,8 +92,8 @@ class CruiseInstall extends Command implements PromptsForMissingInput
             ];
 
             foreach ($docker_compose_files as $docker_file) {
-                $pipe->path(base_path())->command("sed -i '' 's|$og_docker_id|$docker_id|g' ".$docker_file);
-                $pipe->path(base_path())->command(trim("sed -i '' 's|$og_image_name|$image_name|g' ".$docker_file));
+                $pipe->path(base_path())->command("sed -i'' 's|$og_docker_id|$docker_id|g' ".$docker_file);
+                $pipe->path(base_path())->command(trim("sed -i'' 's|$og_image_name|$image_name|g' ".$docker_file));
             }
         });
 
