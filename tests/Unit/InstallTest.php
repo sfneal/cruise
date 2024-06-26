@@ -71,7 +71,11 @@ class InstallTest extends TestCase
                 ->run("grep -A 10 'services:' {$file} | grep -A 10 'app:' | grep 'image:' | awk '{print $2}' | grep -o '^[^:]*'")
                 ->output());
 
-            $this->assertStringContainsString(self::TEST_DOCKER_ID.'/'.self::TEST_DOCKER_IMAGE, $image_name);
+            $this->assertStringContainsString(
+                self::TEST_DOCKER_ID.'/'.self::TEST_DOCKER_IMAGE,
+                $image_name,
+                "New Docker image name not found in {$file}"
+            );
         }
     }
 
