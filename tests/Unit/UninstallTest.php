@@ -12,7 +12,7 @@ class UninstallTest extends TestCase
     protected bool $shouldUninstall = false;
 
     #[Test]
-    public function removes_the_configuration()
+    public function can_remove_the_config()
     {
         $this->assertTrue(File::exists(config_path('cruise.php')));
 
@@ -22,7 +22,7 @@ class UninstallTest extends TestCase
     }
 
     #[Test]
-    public function removes_docker_assets()
+    public function can_remove_docker_assets()
     {
         // Get list of docker asset files
         $directory = __DIR__.'/../../docker/services';
@@ -51,7 +51,7 @@ class UninstallTest extends TestCase
     }
 
     #[Test]
-    public function adds_composer_commands()
+    public function can_remove_composer_commands()
     {
         $expected_scripts = [
             'start-dev' => 'sh vendor/sfneal/cruise/scripts/runners/start-dev.sh',

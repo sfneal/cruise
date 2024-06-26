@@ -13,7 +13,7 @@ class InstallTest extends TestCase
     protected bool $shouldInstall = false;
 
     #[Test]
-    public function copies_the_configuration()
+    public function can_copy_the_configuration()
     {
         // make sure we're starting from a clean state
         if (File::exists(config_path('cruise.php'))) {
@@ -28,7 +28,7 @@ class InstallTest extends TestCase
     }
 
     #[Test]
-    public function copies_docker_assets()
+    public function can_copy_docker_assets()
     {
         // Get list of docker asset files
         $directory = __DIR__.'/../../docker/services';
@@ -54,7 +54,7 @@ class InstallTest extends TestCase
     }
 
     #[Test]
-    public function renames_docker_images()
+    public function can_rename_docker_images()
     {
         // Run install command
         Artisan::call('cruise:install', $this->getCruiseInstallArguments());
@@ -89,7 +89,7 @@ class InstallTest extends TestCase
     }
 
     #[Test]
-    public function adds_composer_commands()
+    public function can_add_composer_commands()
     {
         $expected_scripts = [
             'start-dev' => 'sh vendor/sfneal/cruise/scripts/runners/start-dev.sh',
