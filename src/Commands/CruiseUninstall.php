@@ -4,7 +4,6 @@ namespace Sfneal\Cruise\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Storage;
 use Symfony\Component\Process\Process;
 
 class CruiseUninstall extends Command
@@ -79,14 +78,12 @@ class CruiseUninstall extends Command
 
     private static function deleteFileTree(string $directory): void
     {
-        foreach (array_diff(scandir($directory), ['.','..']) as $file) {
+        foreach (array_diff(scandir($directory), ['.', '..']) as $file) {
             is_dir("$directory/$file")
                 ? self::deleteFileTree("$directory/$file")
                 : unlink("$directory/$file");
-
         }
 
         rmdir($directory);
-
     }
 }
