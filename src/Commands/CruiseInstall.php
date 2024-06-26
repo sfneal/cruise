@@ -76,13 +76,12 @@ class CruiseInstall extends Command implements PromptsForMissingInput
 
     private function renameDockerImages(string $docker_id, string $image_name): void
     {
-        $og_full_image_name = Process::path(base_path())
+        $og_full_image_name = trim(Process::path(base_path())
             ->run("grep -A 10 'services:' docker-compose.yml | grep -A 1 'app:' | grep 'image:' | awk '{print $2}' | grep -o '^[^:]*'")
-            ->output();
+            ->output());
 
         $process = Process::pipe(function (Pipe $pipe) use ($og_full_image_name, $docker_id, $image_name) {
             [$og_docker_id, $og_image_name] = explode('/', $og_full_image_name);
-            $og_image_name = trim($og_image_name);
 
             $docker_compose_files = [
                 'docker-compose.yml',
