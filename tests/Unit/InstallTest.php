@@ -59,11 +59,20 @@ class InstallTest extends TestCase
         // Run install command
         Artisan::call('cruise:install', $this->getCruiseInstallArguments());
 
-        $image_name = trim(Process::path(base_path())
-            ->run("grep -A 10 'services:' docker-compose.yml | grep -A 1 'app:' | grep 'image:' | awk '{print $2}' | grep -o '^[^:]*'")
-            ->output());
+        $docker_files = [
+            'docker-compose.yml',
+            'docker-compose-dev.yml',
+            'docker-compose-dev-db.yml',
+            'docker-compose-dev-node.yml',
+            'docker-compose-tests.yml',
+        ];
+        foreach ($docker_files as $file) {
+            $image_name = trim(Process::path(base_path())
+                ->run("grep -A 10 'services:' {$file} | grep -A 10 'app:' | grep 'image:' | awk '{print $2}' | grep -o '^[^:]*'")
+                ->output());
 
-        $this->assertEquals(self::TEST_DOCKER_ID . '/' . self::TEST_DOCKER_IMAGE, $image_name);
+            $this->assertStringContainsString(self::TEST_DOCKER_ID . '/' . self::TEST_DOCKER_IMAGE, $image_name);
+        }
     }
 
     #[Test]
