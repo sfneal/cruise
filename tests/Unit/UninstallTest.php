@@ -45,6 +45,9 @@ class UninstallTest extends TestCase
         foreach ($files as $file) {
             $this->assertFalse(File::exists(base_path(basename($file))));
         }
+
+        // Confirm docker assets were removed
+        $this->assertFalse(is_dir(base_path('docker')));
     }
 
     #[Test]
