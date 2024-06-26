@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.2.0 - 2024-06-26
+
+### What's Changed
+
+* Cruise install command arguments & prompts by [@sfneal](https://github.com/sfneal) in https://github.com/sfneal/cruise/pull/30
+
+**Full Changelog**: https://github.com/sfneal/cruise/compare/1.1.1...1.2.0
+
 ## 1.1.1 - 2024-06-26
 
 ### What's Changed
