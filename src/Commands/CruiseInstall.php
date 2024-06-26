@@ -3,17 +3,23 @@
 namespace Sfneal\Cruise\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Contracts\Console\PromptsForMissingInput;
+use Illuminate\Process\Pipe;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Process;
+use function Laravel\Prompts\select;
+use function Laravel\Prompts\text;
 
-class CruiseInstall extends Command
+class CruiseInstall extends Command implements PromptsForMissingInput
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'cruise:install';
+    protected $signature = 'cruise:install
+                            {docker_id : Your docker ID you will be using with your laravel application}
+                            {docker_image : Your laravel applications docker image name}';
 
     /**
      * The console command description.
@@ -32,6 +38,8 @@ class CruiseInstall extends Command
 
         Artisan::call('vendor:publish', ['--tag' => 'docker']);
         $this->info('Published docker assets to the application root');
+
+        $this->renameDockerImages($this->argument('docker_id'), $this->argument('docker_image'));
 
         $this->addComposerScript('start-dev');
         $this->addComposerScript('start-dev-db');
@@ -66,7 +74,58 @@ class CruiseInstall extends Command
         }
     }
 
-    private function renameApplication(string $name): void
+    private function renameDockerImages(string $docker_id, string $image_name): void
     {
+        $og_full_image_name = Process::path(base_path())
+            ->run("grep -A 10 'services:' docker-compose.yml | grep -A 1 'app:' | grep 'image:' | awk '{print $2}' | grep -o '^[^:]*'")
+            ->output();
+
+        $process = Process::pipe(function (Pipe $pipe) use ($og_full_image_name, $docker_id, $image_name) {
+            [$og_docker_id, $og_image_name] = explode('/', $og_full_image_name);
+            $og_image_name = trim($og_image_name);
+
+            $pipe->command("sed -i '' 's|$og_docker_id|$docker_id|g' " . base_path('docker-compose.yml'));
+            $pipe->command("sed -i '' 's|$og_docker_id|$docker_id|g' " . base_path('docker-compose-dev.yml'));
+            $pipe->command("sed -i '' 's|$og_docker_id|$docker_id|g' " . base_path('docker-compose-dev-db.yml'));
+            $pipe->command("sed -i '' 's|$og_docker_id|$docker_id|g' " . base_path('docker-compose-dev-node.yml'));
+
+            $pipe->command(trim("sed -i '' 's|$og_image_name|$image_name|g' " . base_path('docker-compose.yml')));
+            $pipe->command(trim("sed -i '' 's|$og_image_name|$image_name|g' " . base_path('docker-compose-dev.yml')));
+            $pipe->command(trim("sed -i '' 's|$og_image_name|$image_name|g' " . base_path('docker-compose-dev-db.yml')));
+            $pipe->command(trim("sed -i '' 's|$og_image_name|$image_name|g' " . base_path('docker-compose-dev-node.yml')));
+        });
+
+        if ($process->successful()) {
+            $this->info("Renamed docker images from {$og_full_image_name} to {$docker_id}/{$image_name}");
+        }
+
+        else {
+            $this->info("Failed to rename docker images from {$og_full_image_name} to {$docker_id}/{$image_name}");
+        }
+    }
+
+    /**
+     * Prompt for missing input arguments using the returned questions.
+     *
+     * @return array<string, string>
+     */
+    protected function promptForMissingArgumentsUsing(): array
+    {
+        return [
+            'docker_id' => function () {
+                return text(
+                    label: 'Enter your Docker ID:',
+                    placeholder: 'E.g. mydockerid',
+                    required: true,
+                );
+            },
+            'docker_image' => function () {
+                return text(
+                    label: 'Enter your Docker image name (recommend using application name):',
+                    placeholder: 'E.g. myapplication',
+                    required: true,
+                );
+            },
+        ];
     }
 }
