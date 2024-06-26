@@ -4,6 +4,7 @@ namespace Sfneal\Cruise\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 use Symfony\Component\Process\Process;
 
 class CruiseUninstall extends Command
@@ -54,6 +55,8 @@ class CruiseUninstall extends Command
                 $this->info("Removed {$file} from application root");
             }
         }
+        self::deleteFileTree(base_path('docker'));
+        $this->info("Removed 'docker' directory from application root");
 
         // Remove compose scripts
         $this->removeComposerScript('start-dev');
@@ -72,5 +75,18 @@ class CruiseUninstall extends Command
         (new Process(['composer', 'config', '--unset', "scripts.$script", '--working-dir='.base_path()]))->run();
 
         $this->info("Removed 'composer $script' command to composer.json");
+    }
+
+    private static function deleteFileTree(string $directory): void
+    {
+        foreach (array_diff(scandir($directory), ['.','..']) as $file) {
+            is_dir("$directory/$file")
+                ? self::deleteFileTree("$directory/$file")
+                : unlink("$directory/$file");
+
+        }
+
+        rmdir($directory);
+
     }
 }
