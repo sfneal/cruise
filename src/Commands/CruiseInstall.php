@@ -4,7 +4,7 @@ namespace Sfneal\Cruise\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
-use Symfony\Component\Process\Process;
+use Illuminate\Support\Facades\Process;
 
 class CruiseInstall extends Command
 {
@@ -57,8 +57,16 @@ class CruiseInstall extends Command
     {
         $script_path = 'vendor/sfneal/cruise/scripts/runners';
 
-        (new Process(['composer', 'config', "scripts.$script", "sh $script_path/$script.sh", '--working-dir='.base_path()]))->run();
+        $process = Process::run([
+            'composer', 'config', "scripts.$script", "sh $script_path/$script.sh", '--working-dir='.base_path()
+        ]);
 
-        $this->info("Added 'composer $script' command to composer.json");
+        if ($process->successful()) {
+            $this->info("Added 'composer $script' command to composer.json");
+        }
+    }
+
+    private function renameApplication(string $name): void
+    {
     }
 }
