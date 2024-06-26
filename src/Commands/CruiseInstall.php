@@ -84,17 +84,17 @@ class CruiseInstall extends Command implements PromptsForMissingInput
             [$og_docker_id, $og_image_name] = explode('/', $og_full_image_name);
             $og_image_name = trim($og_image_name);
 
-            $pipe->command("sed -i '' 's|$og_docker_id|$docker_id|g' " . base_path('docker-compose.yml'));
-            $pipe->command("sed -i '' 's|$og_docker_id|$docker_id|g' " . base_path('docker-compose-dev.yml'));
-            $pipe->command("sed -i '' 's|$og_docker_id|$docker_id|g' " . base_path('docker-compose-dev-db.yml'));
-            $pipe->command("sed -i '' 's|$og_docker_id|$docker_id|g' " . base_path('docker-compose-dev-node.yml'));
-            $pipe->command("sed -i '' 's|$og_docker_id|$docker_id|g' " . base_path('docker-compose-tests.yml'));
-
-            $pipe->command(trim("sed -i '' 's|$og_image_name|$image_name|g' " . base_path('docker-compose.yml')));
-            $pipe->command(trim("sed -i '' 's|$og_image_name|$image_name|g' " . base_path('docker-compose-dev.yml')));
-            $pipe->command(trim("sed -i '' 's|$og_image_name|$image_name|g' " . base_path('docker-compose-dev-db.yml')));
-            $pipe->command(trim("sed -i '' 's|$og_image_name|$image_name|g' " . base_path('docker-compose-dev-node.yml')));
-            $pipe->command(trim("sed -i '' 's|$og_image_name|$image_name|g' " . base_path('docker-compose-tests.yml')));
+            $docker_compose_files = [
+                'docker-compose.yml',
+                'docker-compose-dev.yml',
+                'docker-compose-dev-db.yml',
+                'docker-compose-dev-node.yml',
+                'docker-compose-tests.yml',
+            ];
+            foreach ($docker_compose_files as $docker_file) {
+                $pipe->command("sed -i '' 's|$og_docker_id|$docker_id|g' " . base_path($docker_file));
+                $pipe->command(trim("sed -i '' 's|$og_image_name|$image_name|g' " . base_path($docker_file)));
+            }
         });
 
         if ($process->successful()) {
