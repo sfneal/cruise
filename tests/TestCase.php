@@ -14,7 +14,6 @@ class TestCase extends OrchestraTestCase
     protected bool $shouldInstall = true;
     protected bool $shouldUninstall = true;
 
-
     /**
      * Get package providers.
      *
