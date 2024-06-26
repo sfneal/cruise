@@ -7,7 +7,7 @@ use Illuminate\Contracts\Console\PromptsForMissingInput;
 use Illuminate\Process\Pipe;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Process;
-use function Laravel\Prompts\select;
+
 use function Laravel\Prompts\text;
 
 class CruiseInstall extends Command implements PromptsForMissingInput
@@ -66,7 +66,7 @@ class CruiseInstall extends Command implements PromptsForMissingInput
         $script_path = 'vendor/sfneal/cruise/scripts/runners';
 
         $process = Process::run([
-            'composer', 'config', "scripts.$script", "sh $script_path/$script.sh", '--working-dir='.base_path()
+            'composer', 'config', "scripts.$script", "sh $script_path/$script.sh", '--working-dir='.base_path(),
         ]);
 
         if ($process->successful()) {
@@ -92,16 +92,14 @@ class CruiseInstall extends Command implements PromptsForMissingInput
                 'docker-compose-tests.yml',
             ];
             foreach ($docker_compose_files as $docker_file) {
-                $pipe->command("sed -i '' 's|$og_docker_id|$docker_id|g' " . base_path($docker_file));
-                $pipe->command(trim("sed -i '' 's|$og_image_name|$image_name|g' " . base_path($docker_file)));
+                $pipe->command("sed -i '' 's|$og_docker_id|$docker_id|g' ".base_path($docker_file));
+                $pipe->command(trim("sed -i '' 's|$og_image_name|$image_name|g' ".base_path($docker_file)));
             }
         });
 
         if ($process->successful()) {
             $this->info("Renamed docker images from {$og_full_image_name} to {$docker_id}/{$image_name}");
-        }
-
-        else {
+        } else {
             $this->info("Failed to rename docker images from {$og_full_image_name} to {$docker_id}/{$image_name}");
         }
     }
