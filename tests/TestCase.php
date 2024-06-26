@@ -8,8 +8,12 @@ use Sfneal\Cruise\Providers\CruiseServiceProvider;
 
 class TestCase extends OrchestraTestCase
 {
+    const TEST_DOCKER_ID = 'fakedockerid';
+    const TEST_DOCKER_IMAGE = 'myapplication';
+
     protected bool $shouldInstall = true;
     protected bool $shouldUninstall = true;
+
 
     /**
      * Get package providers.
@@ -39,7 +43,7 @@ class TestCase extends OrchestraTestCase
         parent::setUp();
 
         if ($this->shouldInstall) {
-            $this->artisan('cruise:install');
+            $this->artisan('cruise:install', $this->getCruiseInstallArguments());
         }
     }
 
@@ -50,5 +54,13 @@ class TestCase extends OrchestraTestCase
         }
 
         parent::tearDown();
+    }
+
+    protected function getCruiseInstallArguments(): array
+    {
+        return [
+            'docker_id' => self::TEST_DOCKER_ID,
+            'docker_image' => self::TEST_DOCKER_IMAGE,
+        ];
     }
 }
