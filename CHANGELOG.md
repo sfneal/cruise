@@ -8,13 +8,13 @@
 
 **Full Changelog**: https://github.com/sfneal/cruise/compare/1.1.0...1.1.1
 
-## v1.1.0 (2024-06-25)
+## 1.1.0 - 2024-06-25
 
 - Database command tests by @sfneal in #22
 - Semver Service by @sfneal in #24
 - Basic Documentation by @sfneal in #26
 
-## v1.0.0 (2024-06-24)
+## 1.0.0 - 2024-06-24
 
 - Initial release
 - 'php artisan cruise:uninstall' command by @sfneal in #17
