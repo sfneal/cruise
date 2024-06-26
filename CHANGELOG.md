@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.2.1 - 2024-06-26
+
+### What's Changed
+
+* Default base docker image tags by [@sfneal](https://github.com/sfneal) in https://github.com/sfneal/cruise/pull/31
+
+**Full Changelog**: https://github.com/sfneal/cruise/compare/1.2.0...1.2.1
+
 ## 1.2.0 - 2024-06-26
 
 ### What's Changed
