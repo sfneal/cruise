@@ -59,7 +59,7 @@ jobs:
             -   name: Install sfneal/cruise
                 working-directory: ../laravel-boilerplate-master
                 run: |
-                    php artisan cruise:install
+                    php artisan cruise:install mydockerid myapplication
 
             -   name: Test Downstream App
                 working-directory: ../laravel-boilerplate-master
