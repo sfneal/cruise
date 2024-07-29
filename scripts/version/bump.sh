@@ -37,3 +37,4 @@ perl -pi -e "s/${VERSION}/${BUMP}/g" ./docker-compose.yml
 perl -pi -e "s/${VERSION}/${BUMP}/g" ./docker-compose-dev.yml
 perl -pi -e "s/${VERSION}/${BUMP}/g" ./docker-compose-dev-db.yml
 perl -pi -e "s/${VERSION}/${BUMP}/g" ./docker-compose-dev-node.yml
+perl -pi -e "s/${VERSION}/${BUMP}/g" ./docker-compose-tests.yml
