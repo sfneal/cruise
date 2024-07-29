@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.2.4 - 2024-07-29
+
+### What's Changed
+
+* `php artisan bump` command not bumping docker-compose-test.yml by [@sfneal](https://github.com/sfneal) in https://github.com/sfneal/cruise/pull/32
+* `php artisan bump` command not committing all docker-compose files by [@sfneal](https://github.com/sfneal) in https://github.com/sfneal/cruise/pull/34
+
+**Full Changelog**: https://github.com/sfneal/cruise/compare/1.2.1...1.2.4
+
 ## 1.2.3 - 2024-07-29
 
 ### What's Changed
