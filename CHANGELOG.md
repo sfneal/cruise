@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.2.5 - 2024-09-09
+
+### What's Changed
+
+* Fix issue with using 'composer start-dev-node' command by [@sfneal](https://github.com/sfneal) in https://github.com/sfneal/cruise/pull/35
+
+**Full Changelog**: https://github.com/sfneal/cruise/compare/1.2.4...1.2.5
+
 ## 1.2.4 - 2024-07-29
 
 ### What's Changed
