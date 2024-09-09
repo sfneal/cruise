@@ -17,7 +17,7 @@ export BRANCH
 composer stop
 
 # Build new containers
-docker compose -f docker-compose-node.yml build
+docker compose -f docker-compose-dev-node.yml build
 
 # Start fresh container instances
-docker compose -f docker-compose-node.yml up -d
+docker compose -f docker-compose-dev-node.yml up -d
