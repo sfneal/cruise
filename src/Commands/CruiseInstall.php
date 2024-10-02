@@ -149,7 +149,7 @@ class CruiseInstall extends Command implements PromptsForMissingInput
                     options: ['Webpack', 'Vite'],
                     default: 'Vite',
                 );
-            }
+            },
         ];
     }
 }
