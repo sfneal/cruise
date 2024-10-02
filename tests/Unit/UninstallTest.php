@@ -25,7 +25,7 @@ class UninstallTest extends TestCase
     public function can_remove_docker_assets()
     {
         // Get list of docker asset files
-        $directory = __DIR__.'/../../docker/services';
+        $directory = __DIR__.'/../../docker/services/webpack';
         $files = [];
         foreach (scandir($directory) as $file) {
             if ($file !== '.' && $file !== '..') {
