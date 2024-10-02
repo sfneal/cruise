@@ -17,7 +17,7 @@ class InstallTest extends TestCase
     {
         return [
             'Webpack' => ['Webpack'],
-            'Vite' => ['Vite']
+            'Vite' => ['Vite'],
         ];
     }
 
@@ -42,7 +42,7 @@ class InstallTest extends TestCase
     public function can_copy_docker_assets(string $front_end_compiler)
     {
         // Get list of docker asset files
-        $directory = __DIR__.'/../../docker/services/' . strtolower($front_end_compiler);
+        $directory = __DIR__.'/../../docker/services/'.strtolower($front_end_compiler);
         $files = [];
         foreach (scandir($directory) as $file) {
             if ($file !== '.' && $file !== '..') {
