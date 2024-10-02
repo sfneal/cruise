@@ -5,6 +5,7 @@ namespace Sfneal\Cruise\Tests\Unit;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Process;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use Sfneal\Cruise\Tests\TestCase;
 
@@ -12,8 +13,17 @@ class InstallTest extends TestCase
 {
     protected bool $shouldInstall = false;
 
+    public static function frontEndCompilersProvider(): array
+    {
+        return [
+            'Webpack' => ['Webpack'],
+            'Vite' => ['Vite']
+        ];
+    }
+
     #[Test]
-    public function can_copy_the_configuration()
+    #[DataProvider('frontEndCompilersProvider')]
+    public function can_copy_the_configuration(string $front_end_compiler)
     {
         // make sure we're starting from a clean state
         if (File::exists(config_path('cruise.php'))) {
@@ -22,16 +32,17 @@ class InstallTest extends TestCase
 
         $this->assertFalse(File::exists(config_path('cruise.php')));
 
-        Artisan::call('cruise:install', $this->getCruiseInstallArguments());
+        Artisan::call('cruise:install', $this->getCruiseInstallArguments($front_end_compiler));
 
         $this->assertTrue(File::exists(config_path('cruise.php')));
     }
 
     #[Test]
-    public function can_copy_docker_assets()
+    #[DataProvider('frontEndCompilersProvider')]
+    public function can_copy_docker_assets(string $front_end_compiler)
     {
         // Get list of docker asset files
-        $directory = __DIR__.'/../../docker/services';
+        $directory = __DIR__.'/../../docker/services/' . strtolower($front_end_compiler);
         $files = [];
         foreach (scandir($directory) as $file) {
             if ($file !== '.' && $file !== '..') {
@@ -45,7 +56,7 @@ class InstallTest extends TestCase
         }
 
         // Run install command
-        Artisan::call('cruise:install', $this->getCruiseInstallArguments());
+        Artisan::call('cruise:install', $this->getCruiseInstallArguments($front_end_compiler));
 
         // Confirm files DO exists
         foreach ($files as $file) {
@@ -54,10 +65,11 @@ class InstallTest extends TestCase
     }
 
     #[Test]
-    public function can_rename_docker_images()
+    #[DataProvider('frontEndCompilersProvider')]
+    public function can_rename_docker_images(string $front_end_compiler)
     {
         // Run install command
-        Artisan::call('cruise:install', $this->getCruiseInstallArguments());
+        Artisan::call('cruise:install', $this->getCruiseInstallArguments($front_end_compiler));
 
         $docker_files = [
             'docker-compose.yml',
@@ -80,16 +92,18 @@ class InstallTest extends TestCase
     }
 
     #[Test]
-    public function can_prompt_for_docker_id_and_image_name()
+    public function can_prompt_for_docker_id_image_name_and_frontend_compiler()
     {
         $this->artisan('cruise:install')
             ->expectsQuestion('Enter your Docker ID:', 'fakedockerid')
             ->expectsQuestion('Enter your Docker image name (recommend using application name):', 'myapp')
+            ->expectsChoice('Select Front-end asset compiler', 'Webpack', ['Webpack', 'Vite'])
             ->assertSuccessful();
     }
 
     #[Test]
-    public function can_add_composer_commands()
+    #[DataProvider('frontEndCompilersProvider')]
+    public function can_add_composer_commands(string $front_end_compiler)
     {
         $expected_scripts = [
             'start-dev' => 'sh vendor/sfneal/cruise/scripts/runners/start-dev.sh',
@@ -104,7 +118,7 @@ class InstallTest extends TestCase
         $pre_install = json_decode(file_get_contents(base_path('composer.json')), true);
         $this->assertEmpty($pre_install['scripts']);
 
-        $this->artisan('cruise:install', $this->getCruiseInstallArguments());
+        $this->artisan('cruise:install', $this->getCruiseInstallArguments($front_end_compiler));
 
         // Confirm scripts added after installation
         $post_install = json_decode(file_get_contents(base_path('composer.json')), true);

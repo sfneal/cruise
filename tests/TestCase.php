@@ -55,11 +55,12 @@ class TestCase extends OrchestraTestCase
         parent::tearDown();
     }
 
-    protected function getCruiseInstallArguments(): array
+    protected function getCruiseInstallArguments(string $compiler = 'Webpack'): array
     {
         return [
             'docker_id' => self::TEST_DOCKER_ID,
             'docker_image' => self::TEST_DOCKER_IMAGE,
+            'front_end_compiler' => $compiler,
         ];
     }
 }
