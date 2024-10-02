@@ -95,6 +95,7 @@ class CruiseInstall extends Command implements PromptsForMissingInput
             ->run("grep -A 10 'services:' docker-compose.yml | grep -A 1 'app:' | grep 'image:' | awk '{print $2}' | grep -o '^[^:]*'")
             ->output());
 
+        // Linux process
         $process = Process::pipe(function (Pipe $pipe) use ($og_full_image_name, $docker_id, $image_name) {
             [$og_docker_id, $og_image_name] = explode('/', $og_full_image_name);
 
@@ -107,16 +108,38 @@ class CruiseInstall extends Command implements PromptsForMissingInput
             ];
 
             foreach ($docker_compose_files as $docker_file) {
+                // Should work on Linux
                 $pipe->path(base_path())->command("sed -i'' 's|$og_docker_id|$docker_id|g' ".$docker_file);
                 $pipe->path(base_path())->command(trim("sed -i'' 's|$og_image_name|$image_name|g' ".$docker_file));
             }
         });
 
+        // Mac process - ugly hack
+        if (! $process->successful()) {
+            $process = Process::pipe(function (Pipe $pipe) use ($og_full_image_name, $docker_id, $image_name) {
+                [$og_docker_id, $og_image_name] = explode('/', $og_full_image_name);
+
+                $docker_compose_files = [
+                    'docker-compose.yml',
+                    'docker-compose-dev.yml',
+                    'docker-compose-dev-db.yml',
+                    'docker-compose-dev-node.yml',
+                    'docker-compose-tests.yml',
+                ];
+
+                foreach ($docker_compose_files as $docker_file) {
+                    // Should work on Macs
+                    $pipe->path(base_path())->command("sed -i '' 's|$og_docker_id|$docker_id|g' ".$docker_file);
+                    $pipe->path(base_path())->command(trim("sed -i '' 's|$og_image_name|$image_name|g' ".$docker_file));
+
+                    // I don't care if it works on Windows!
+                }
+            });
+        }
+
         if ($process->successful()) {
-            print_r(['Success']);
             $this->info("Renamed docker images from {$og_full_image_name} to {$docker_id}/{$image_name}");
         } else {
-            print_r(['Failure']);
             $this->info("Failed to rename docker images from {$og_full_image_name} to {$docker_id}/{$image_name}");
         }
     }
