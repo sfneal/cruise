@@ -1,6 +1,6 @@
 {
     "name": "sfneal/cruise",
-    "description": "Boilerplate for PHP package repo's",
+    "description": "Cruise is a Laravel Sail inspired CLI for managing Docker services",
     "keywords": [
         "sfneal",
         "cruise"
