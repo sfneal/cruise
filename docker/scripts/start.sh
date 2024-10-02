@@ -19,6 +19,10 @@ chown -R $USER:www-data /var/www/bootstrap/cache
 chmod -R 775 /var/www/storage
 chmod -R 775 /var/www/bootstrap/cache
 
+# Make sqlite DB writeable
+sudo chown -R :www-data /var/www/
+sudo chmod -R 775 /var/www/database/database.sqlite
+
 # Clear config and cache
 php artisan env
 
