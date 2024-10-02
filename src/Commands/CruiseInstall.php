@@ -8,6 +8,7 @@ use Illuminate\Process\Pipe;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Process;
 
+use function Laravel\Prompts\select;
 use function Laravel\Prompts\text;
 
 class CruiseInstall extends Command implements PromptsForMissingInput
@@ -19,7 +20,8 @@ class CruiseInstall extends Command implements PromptsForMissingInput
      */
     protected $signature = 'cruise:install
                             {docker_id : Your docker ID you will be using with your laravel application}
-                            {docker_image : Your laravel applications docker image name}';
+                            {docker_image : Your laravel applications docker image name}
+                            {front_end_compiler : Front-end asset bundler}';
 
     /**
      * The console command description.
@@ -38,6 +40,8 @@ class CruiseInstall extends Command implements PromptsForMissingInput
 
         Artisan::call('vendor:publish', ['--tag' => 'docker']);
         $this->info('Published docker assets to the application root');
+
+        $this->publishDockerAssets();
 
         $this->renameDockerImages($this->argument('docker_id'), $this->argument('docker_image'));
 
@@ -59,6 +63,17 @@ class CruiseInstall extends Command implements PromptsForMissingInput
         }
 
         return self::SUCCESS;
+    }
+
+    private function publishDockerAssets(): void
+    {
+        if ($this->argument('front_end_compiler') == 'Webpack') {
+            Artisan::call('vendor:publish', ['--tag' => 'docker-webpack']);
+        }
+        if ($this->argument('front_end_compiler') == 'Vite') {
+            Artisan::call('vendor:publish', ['--tag' => 'docker-vite']);
+        }
+        $this->info("Published {$this->argument('front_end_compiler')} Dockerfiles & docker-compose.yml's");
     }
 
     private function addComposerScript(string $script): void
@@ -98,8 +113,10 @@ class CruiseInstall extends Command implements PromptsForMissingInput
         });
 
         if ($process->successful()) {
+            print_r(['Success']);
             $this->info("Renamed docker images from {$og_full_image_name} to {$docker_id}/{$image_name}");
         } else {
+            print_r(['Failure']);
             $this->info("Failed to rename docker images from {$og_full_image_name} to {$docker_id}/{$image_name}");
         }
     }
@@ -126,6 +143,13 @@ class CruiseInstall extends Command implements PromptsForMissingInput
                     required: true,
                 );
             },
+            'front_end_compiler' => function () {
+                return select(
+                    label: 'Select Front-end asset compiler',
+                    options: ['Webpack', 'Vite'],
+                    default: 'Vite',
+                );
+            }
         ];
     }
 }

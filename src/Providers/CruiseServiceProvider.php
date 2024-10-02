@@ -39,9 +39,9 @@ class CruiseServiceProvider extends ServiceProvider
             ]);
         }
 
-        // Docker compose & dockerfiles
+        // version & changelog files
         $this->publishes([
-            __DIR__.'/../../docker/services' => base_path(''),
+            __DIR__.'/../../docker/static' => base_path(''),
         ], 'docker');
 
         // Supervisor configs
@@ -53,6 +53,16 @@ class CruiseServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__.'/../../docker/scripts' => base_path('docker/scripts'),
         ], 'docker');
+
+        // Webpack - Docker compose & dockerfiles
+        $this->publishes([
+            __DIR__.'/../../docker/services/webpack' => base_path(''),
+        ], 'docker-webpack');
+
+        // Vite - Docker compose & dockerfiles
+        $this->publishes([
+            __DIR__.'/../../docker/services/vite' => base_path(''),
+        ], 'docker-vite');
     }
 
     /**
