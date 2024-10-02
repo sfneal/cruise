@@ -8,6 +8,7 @@ use Illuminate\Process\Pipe;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Process;
 
+use function Laravel\Prompts\select;
 use function Laravel\Prompts\text;
 
 class CruiseInstall extends Command implements PromptsForMissingInput
@@ -19,7 +20,8 @@ class CruiseInstall extends Command implements PromptsForMissingInput
      */
     protected $signature = 'cruise:install
                             {docker_id : Your docker ID you will be using with your laravel application}
-                            {docker_image : Your laravel applications docker image name}';
+                            {docker_image : Your laravel applications docker image name}
+                            {front_end_compiler : Front-end asset bundler}';
 
     /**
      * The console command description.
@@ -38,6 +40,8 @@ class CruiseInstall extends Command implements PromptsForMissingInput
 
         Artisan::call('vendor:publish', ['--tag' => 'docker']);
         $this->info('Published docker assets to the application root');
+
+        $this->publishDockerAssets();
 
         $this->renameDockerImages($this->argument('docker_id'), $this->argument('docker_image'));
 
@@ -61,6 +65,17 @@ class CruiseInstall extends Command implements PromptsForMissingInput
         return self::SUCCESS;
     }
 
+    private function publishDockerAssets(): void
+    {
+        if ($this->argument('front_end_compiler') == 'Webpack') {
+            Artisan::call('vendor:publish', ['--tag' => 'docker-webpack']);
+        }
+        if ($this->argument('front_end_compiler') == 'Vite') {
+            Artisan::call('vendor:publish', ['--tag' => 'docker-vite']);
+        }
+        $this->info("Published {$this->argument('front_end_compiler')} Dockerfiles & docker-compose.yml's");
+    }
+
     private function addComposerScript(string $script): void
     {
         $script_path = 'vendor/sfneal/cruise/scripts/runners';
@@ -80,6 +95,7 @@ class CruiseInstall extends Command implements PromptsForMissingInput
             ->run("grep -A 10 'services:' docker-compose.yml | grep -A 1 'app:' | grep 'image:' | awk '{print $2}' | grep -o '^[^:]*'")
             ->output());
 
+        // Linux process
         $process = Process::pipe(function (Pipe $pipe) use ($og_full_image_name, $docker_id, $image_name) {
             [$og_docker_id, $og_image_name] = explode('/', $og_full_image_name);
 
@@ -92,10 +108,34 @@ class CruiseInstall extends Command implements PromptsForMissingInput
             ];
 
             foreach ($docker_compose_files as $docker_file) {
+                // Should work on Linux
                 $pipe->path(base_path())->command("sed -i'' 's|$og_docker_id|$docker_id|g' ".$docker_file);
                 $pipe->path(base_path())->command(trim("sed -i'' 's|$og_image_name|$image_name|g' ".$docker_file));
             }
         });
+
+        // Mac process - ugly hack
+        if (! $process->successful()) {
+            $process = Process::pipe(function (Pipe $pipe) use ($og_full_image_name, $docker_id, $image_name) {
+                [$og_docker_id, $og_image_name] = explode('/', $og_full_image_name);
+
+                $docker_compose_files = [
+                    'docker-compose.yml',
+                    'docker-compose-dev.yml',
+                    'docker-compose-dev-db.yml',
+                    'docker-compose-dev-node.yml',
+                    'docker-compose-tests.yml',
+                ];
+
+                foreach ($docker_compose_files as $docker_file) {
+                    // Should work on Macs
+                    $pipe->path(base_path())->command("sed -i '' 's|$og_docker_id|$docker_id|g' ".$docker_file);
+                    $pipe->path(base_path())->command(trim("sed -i '' 's|$og_image_name|$image_name|g' ".$docker_file));
+
+                    // I don't care if it works on Windows!
+                }
+            });
+        }
 
         if ($process->successful()) {
             $this->info("Renamed docker images from {$og_full_image_name} to {$docker_id}/{$image_name}");
@@ -124,6 +164,13 @@ class CruiseInstall extends Command implements PromptsForMissingInput
                     label: 'Enter your Docker image name (recommend using application name):',
                     placeholder: 'E.g. myapplication',
                     required: true,
+                );
+            },
+            'front_end_compiler' => function () {
+                return select(
+                    label: 'Select Front-end asset compiler',
+                    options: ['Webpack', 'Vite'],
+                    default: 'Vite',
                 );
             },
         ];
