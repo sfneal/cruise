@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.0.0 - 2024-10-02
+
+### What's Changed
+
+* Vite support by [@sfneal](https://github.com/sfneal) in https://github.com/sfneal/cruise/pull/38
+
+**Full Changelog**: https://github.com/sfneal/cruise/compare/1.2.5...2.0.0
+
 ## 1.2.5 - 2024-09-09
 
 ### What's Changed
