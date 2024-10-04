@@ -103,6 +103,7 @@ jobs:
                     cd test-app
 
             -   name: Install Front-end Dependencies
+                working-directory: ../test-app
                 run: yarn install
 
             -   name: Scaffold Laravel Breeze
