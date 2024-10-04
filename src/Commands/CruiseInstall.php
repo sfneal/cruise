@@ -68,10 +68,10 @@ class CruiseInstall extends Command implements PromptsForMissingInput
 
     private function publishDockerAssets(): void
     {
-        if ($this->argument('front_end_compiler') == 'Webpack') {
+        if (strtolower($this->argument('front_end_compiler')) == 'webpack') {
             Artisan::call('vendor:publish', ['--tag' => 'docker-webpack']);
         }
-        if ($this->argument('front_end_compiler') == 'Vite') {
+        if (strtolower($this->argument('front_end_compiler')) == 'vite') {
             Artisan::call('vendor:publish', ['--tag' => 'docker-vite', '--force' => true]);
         }
         $this->info("Published {$this->argument('front_end_compiler')} Dockerfiles & docker-compose.yml's");
