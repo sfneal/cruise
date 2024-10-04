@@ -78,14 +78,17 @@ class CruiseInstall extends Command implements PromptsForMissingInput
 
     private function addComposerScript(string $script): void
     {
-        $script_path = 'vendor/sfneal/cruise/scripts/runners';
+        $this->addComposerCommand($script, "sh vendor/sfneal/cruise/scripts/runners/$script.sh");
+    }
 
+    private function addComposerCommand(string $name, string $command): void
+    {
         $process = Process::run([
-            'composer', 'config', "scripts.$script", "sh $script_path/$script.sh", '--working-dir='.base_path(),
+            'composer', 'config', "scripts.$name", "$command", '--working-dir='.base_path(),
         ]);
 
         if ($process->successful()) {
-            $this->info("Added 'composer $script' command to composer.json");
+            $this->info("Added 'composer $name' command to composer.json");
         }
     }
 
