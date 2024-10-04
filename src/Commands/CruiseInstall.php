@@ -106,12 +106,14 @@ class CruiseInstall extends Command implements PromptsForMissingInput
         }
 
         // Add namespacing
-        $this->warn('In order to make DDD work correctly, add the proper namespaces to the autoload.psr-4 section of your composer.json');
-        $this->info('
-            "App\\\": "app/App",
-            "Domain\\\": "app/Domain",
-            "Support\\\": "app/Support",
-        ');
+        $process = Process::path(base_path())->run("sh vendor/sfneal/cruise/scripts/utils/add-ddd-namespacing.sh");
+
+        if ($process->successful()) {
+            $this->info("Added DDD namespacing to composer.json");
+        }
+        else {
+            $this->fail("Unable to add DDD namespacing to composer.json");
+        }
     }
 
     private function addComposerScript(string $script): void
