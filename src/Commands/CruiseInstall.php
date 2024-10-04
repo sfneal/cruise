@@ -102,7 +102,7 @@ class CruiseInstall extends Command implements PromptsForMissingInput
         print_r([
             'og_full_image_name' => $og_full_image_name,
             'docker_id' => $docker_id,
-            'image_name' => $image_name
+            'image_name' => $image_name,
         ]);
 
         // Linux process
