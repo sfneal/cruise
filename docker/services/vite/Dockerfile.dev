@@ -57,6 +57,7 @@ RUN yarn run ${yarn_env}
 RUN rm -r /var/www/node_modules
 
 
+
 # Build temp image to install composer dependencies
 FROM stephenneal/php-composer:${php_composer_tag} AS composer
 
