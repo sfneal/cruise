@@ -41,6 +41,8 @@ services:
       - ./vite.config.js:/var/www/vite.config.js
       - ./public:/var/www/public
       - ./resources:/var/www/resources
+    ports:
+      - "5173:5173"
     depends_on:
       - app
     networks:
