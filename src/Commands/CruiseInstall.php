@@ -86,10 +86,10 @@ class CruiseInstall extends Command implements PromptsForMissingInput
     private function enableDDD(): void
     {
         Artisan::call('vendor:publish', ['--tag' => 'ddd', '--force' => true]);
-        $this->info("Publish app/App/BaseApplication & bootstrap/app.php");
+        $this->info('Publish app/App/BaseApplication & bootstrap/app.php');
 
         // Add namespacing
-        $this->warn("In order to make DDD work correctly, add the proper namespaces to the autoload.psr-4 section of your composer.json");
+        $this->warn('In order to make DDD work correctly, add the proper namespaces to the autoload.psr-4 section of your composer.json');
         $this->info('
             "App\\": "app/App",
             "Domain\\": "app/Domain",
@@ -206,7 +206,7 @@ class CruiseInstall extends Command implements PromptsForMissingInput
                     no: 'No',
                     hint: 'This will separate your application into App, Domain & Support namespaces.'
                 );
-            }
+            },
         ];
     }
 }
