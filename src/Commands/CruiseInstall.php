@@ -45,6 +45,7 @@ class CruiseInstall extends Command implements PromptsForMissingInput
 
         $this->renameDockerImages($this->argument('docker_id'), $this->argument('docker_image'));
 
+        $this->addComposerCommand('test', 'docker exec -it app vendor/bin/phpunit');
         $this->addComposerScript('start-dev');
         $this->addComposerScript('start-dev-db');
         $this->addComposerScript('start-dev-node');
