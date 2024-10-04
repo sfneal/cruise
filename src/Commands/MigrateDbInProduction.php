@@ -4,7 +4,6 @@ namespace Sfneal\Cruise\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
-use Sfneal\Helpers\Laravel\AppInfo;
 
 class MigrateDbInProduction extends Command
 {
