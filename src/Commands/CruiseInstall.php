@@ -6,6 +6,7 @@ use Illuminate\Console\Command;
 use Illuminate\Contracts\Console\PromptsForMissingInput;
 use Illuminate\Process\Pipe;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Process;
 
 use function Laravel\Prompts\confirm;
@@ -86,14 +87,30 @@ class CruiseInstall extends Command implements PromptsForMissingInput
     private function enableDDD(): void
     {
         Artisan::call('vendor:publish', ['--tag' => 'ddd', '--force' => true]);
-        $this->info('Publish app/App/BaseApplication & bootstrap/app.php');
+        $this->info('Published app/App/BaseApplication & bootstrap/app.php');
+
+        // Get Existing directories
+        $existing_directories = File::directories(base_path('app'));
+
+        // Create app/App, app/Domain & app/Support
+        foreach (['App', 'Domain', 'Support'] as $namespace) {
+            $path = base_path("app/$namespace");
+            if (! File::isDirectory($path)) {
+                File::makeDirectory($path);
+            }
+        }
+
+        // Move existing directories into app/App
+        foreach ($existing_directories as $directory) {
+            File::moveDirectory($directory, base_path('app/App') . DIRECTORY_SEPARATOR . basename($directory));
+        }
 
         // Add namespacing
         $this->warn('In order to make DDD work correctly, add the proper namespaces to the autoload.psr-4 section of your composer.json');
         $this->info('
-            "App\\": "app/App",
-            "Domain\\": "app/Domain",
-            "Support\\": "app/Support",
+            "App\\\": "app/App",
+            "Domain\\\": "app/Domain",
+            "Support\\\": "app/Support",
         ');
     }
 
