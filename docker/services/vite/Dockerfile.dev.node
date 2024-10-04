@@ -30,9 +30,6 @@ FROM stephenneal/node-yarn:${node_yarn_tag} AS node
 # Set working directory
 WORKDIR /var/www
 
-# Yarn install environment ('production' or 'development')
-ARG yarn_env="dev"
-
 # Copy npm package files
 COPY ["package.json", "yarn.lock", "/var/www/"]
 
