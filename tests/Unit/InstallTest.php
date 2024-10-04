@@ -52,7 +52,8 @@ class InstallTest extends TestCase
 
         // Confirm files DON'T already exist
         foreach ($files as $file) {
-            $this->assertFalse(File::exists(base_path(basename($file))));
+            $file_path = base_path(basename($file));
+            $this->assertFalse(File::exists($file_path), "The file '{$file_path}' already exists");
         }
 
         // Run install command
@@ -60,7 +61,8 @@ class InstallTest extends TestCase
 
         // Confirm files DO exists
         foreach ($files as $file) {
-            $this->assertTrue(File::exists(base_path(basename($file))));
+            $file_path = base_path(basename($file));
+            $this->assertTrue(File::exists($file_path), "The file '{$file_path}' does not exists");
         }
     }
 
