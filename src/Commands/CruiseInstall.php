@@ -6,8 +6,10 @@ use Illuminate\Console\Command;
 use Illuminate\Contracts\Console\PromptsForMissingInput;
 use Illuminate\Process\Pipe;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Process;
 
+use function Laravel\Prompts\confirm;
 use function Laravel\Prompts\select;
 use function Laravel\Prompts\text;
 
@@ -21,7 +23,8 @@ class CruiseInstall extends Command implements PromptsForMissingInput
     protected $signature = 'cruise:install
                             {docker_id : Your docker ID you will be using with your laravel application}
                             {docker_image : Your laravel applications docker image name}
-                            {front_end_compiler : Front-end asset bundler}';
+                            {front_end_compiler : Front-end asset bundler}
+                            {--ddd : Enable Domain Driven Design application scaffolding}';
 
     /**
      * The console command description.
@@ -44,6 +47,10 @@ class CruiseInstall extends Command implements PromptsForMissingInput
         $this->publishDockerAssets();
 
         $this->renameDockerImages($this->argument('docker_id'), $this->argument('docker_image'));
+
+        if ($this->option('ddd')) {
+            $this->enableDDD();
+        }
 
         $this->addComposerCommand('test', 'docker exec -it app vendor/bin/phpunit');
         $this->addComposerScript('start-dev');
@@ -75,6 +82,42 @@ class CruiseInstall extends Command implements PromptsForMissingInput
             Artisan::call('vendor:publish', ['--tag' => 'docker-vite', '--force' => true]);
         }
         $this->info("Published {$this->argument('front_end_compiler')} Dockerfiles & docker-compose.yml's");
+    }
+
+    private function enableDDD(): void
+    {
+        Artisan::call('vendor:publish', ['--tag' => 'ddd', '--force' => true]);
+        $this->info('Published app/App/BaseApplication & bootstrap/app.php');
+
+        // Get Existing directories
+        $existing_directories = File::directories(base_path('app'));
+
+        // Create app/App, app/Domain & app/Support
+        foreach (['App', 'Domain', 'Support'] as $namespace) {
+            $path = base_path("app/$namespace");
+            if (! File::isDirectory($path)) {
+                File::makeDirectory($path);
+            }
+        }
+
+        // Move existing directories into app/App
+        foreach ($existing_directories as $directory) {
+            File::moveDirectory($directory, base_path('app/App').DIRECTORY_SEPARATOR.basename($directory));
+        }
+
+        // Add namespacing
+        $process = Process::path(base_path())->run('sh vendor/sfneal/cruise/scripts/utils/ddd-namespacing/linux.sh');
+
+        // Try again using Mac syntax instead of Windows
+        if (! $process->successful()) {
+            $process = Process::path(base_path())->run('sh vendor/sfneal/cruise/scripts/utils/ddd-namespacing/mac.sh');
+        }
+
+        if ($process->successful()) {
+            $this->info('Added DDD namespacing to composer.json');
+        } else {
+            $this->fail('Unable to add DDD namespacing to composer.json');
+        }
     }
 
     private function addComposerScript(string $script): void
@@ -176,6 +219,15 @@ class CruiseInstall extends Command implements PromptsForMissingInput
                     label: 'Select Front-end asset compiler',
                     options: ['Webpack', 'Vite'],
                     default: 'Vite',
+                );
+            },
+            'ddd' => function () {
+                return confirm(
+                    label: 'Do you want to enable Domain Driven Design application scaffolding?',
+                    default: false,
+                    yes: 'Yes',
+                    no: 'No',
+                    hint: 'This will separate your application into App, Domain & Support namespaces.'
                 );
             },
         ];
