@@ -127,7 +127,7 @@ jobs:
             -   name: Install sfneal/cruise
                 working-directory: ../test-app
                 run: |
-                    php artisan cruise:install mydockerid myapplication vite ${{ matrix.php }}
+                    php artisan cruise:install mydockerid myapplication vite ${{ matrix.flags }}
 
             -   name: Test Downstream App
                 working-directory: ../test-app
