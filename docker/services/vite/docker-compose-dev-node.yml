@@ -17,10 +17,12 @@ services:
     working_dir: /var/www
     volumes:
       - app:/var/www
+      - public:/var/www/public
       - ./app:/var/www/app
       - ./public:/var/www/public
       - ./resources:/var/www/resources
       - ./routes:/var/www/routes
+      - ./tests:/var/www/tests
     depends_on:
       - cache
     networks:
@@ -63,6 +65,7 @@ services:
       - ./public:/var/www/public
       - ./resources:/var/www/resources
       - ./routes:/var/www/routes
+      - ./tests:/var/www/tests
     depends_on:
       - app
     networks:

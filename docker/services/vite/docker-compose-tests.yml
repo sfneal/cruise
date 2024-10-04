@@ -18,9 +18,9 @@ services:
     volumes:
       - app:/var/www
       - ./app:/var/www/app
-      - ./public:/var/www/public
       - ./resources:/var/www/resources
       - ./routes:/var/www/routes
+      - ./tests:/var/www/tests
     depends_on:
       - cache
       - database
