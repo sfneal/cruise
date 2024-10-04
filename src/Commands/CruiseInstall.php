@@ -106,13 +106,12 @@ class CruiseInstall extends Command implements PromptsForMissingInput
         }
 
         // Add namespacing
-        $process = Process::path(base_path())->run("sh vendor/sfneal/cruise/scripts/utils/add-ddd-namespacing.sh");
+        $process = Process::path(base_path())->run('sh vendor/sfneal/cruise/scripts/utils/add-ddd-namespacing.sh');
 
         if ($process->successful()) {
-            $this->info("Added DDD namespacing to composer.json");
-        }
-        else {
-            $this->fail("Unable to add DDD namespacing to composer.json");
+            $this->info('Added DDD namespacing to composer.json');
+        } else {
+            $this->fail('Unable to add DDD namespacing to composer.json');
         }
     }
 
