@@ -99,6 +99,12 @@ class CruiseInstall extends Command implements PromptsForMissingInput
             ->run("grep -A 10 'services:' docker-compose.yml | grep -A 1 'app:' | grep 'image:' | awk '{print $2}' | grep -o '^[^:]*'")
             ->output());
 
+        print_r([
+            'og_full_image_name' => $og_full_image_name,
+            'docker_id' => $docker_id,
+            'image_name' => $image_name
+        ]);
+
         // Linux process
         $process = Process::pipe(function (Pipe $pipe) use ($og_full_image_name, $docker_id, $image_name) {
             [$og_docker_id, $og_image_name] = explode('/', $og_full_image_name);
