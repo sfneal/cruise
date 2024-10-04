@@ -30,7 +30,7 @@ class MigrateDbInProduction extends Command
      */
     public function handle(): int
     {
-        if (AppInfo::isEnvProduction()) {
+        if (config('app.env') == 'production') {
             $this->info("Running database migrations because the app env is 'production'.");
             Artisan::call('migrate --force');
 
