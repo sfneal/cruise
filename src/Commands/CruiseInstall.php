@@ -102,7 +102,7 @@ class CruiseInstall extends Command implements PromptsForMissingInput
 
         // Move existing directories into app/App
         foreach ($existing_directories as $directory) {
-            File::moveDirectory($directory, base_path('app/App') . DIRECTORY_SEPARATOR . basename($directory));
+            File::moveDirectory($directory, base_path('app/App').DIRECTORY_SEPARATOR.basename($directory));
         }
 
         // Add namespacing
