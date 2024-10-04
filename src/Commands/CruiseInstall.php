@@ -47,7 +47,7 @@ class CruiseInstall extends Command implements PromptsForMissingInput
 
         $this->renameDockerImages($this->argument('docker_id'), $this->argument('docker_image'));
 
-        if ($this->argument('ddd')) {
+        if ($this->option('ddd')) {
             $this->enableDDD();
         }
 
