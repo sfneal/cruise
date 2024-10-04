@@ -7,7 +7,7 @@ services:
       args:
         env_file_name: .env.dev.db
         composer_flags: "--no-scripts --no-autoloader"
-        yarn_env: "dev"
+        yarn_env: "build"
     image: "stephenneal/cruise-boilerplate:0.1.0-${BRANCH}"
     container_name: app
     command: "--app"
@@ -18,7 +18,6 @@ services:
     volumes:
       - app:/var/www
       - ./app:/var/www/app
-      - ./public:/var/www/public
       - ./resources:/var/www/resources
       - ./routes:/var/www/routes
     depends_on:
@@ -39,7 +38,6 @@ services:
     volumes:
       - app:/var/www
       - ./app:/var/www/app
-      - ./public:/var/www/public
       - ./resources:/var/www/resources
       - ./routes:/var/www/routes
     depends_on:
