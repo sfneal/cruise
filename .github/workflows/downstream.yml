@@ -75,7 +75,7 @@ jobs:
                 php: [8.3]
                 flags: ["--ddd", ""]
 
-        name: Downstream App Install | Vite ${{ matrix.php }}
+        name: Downstream App Install | Vite ${{ matrix.flags }}
 
         steps:
             -   name: Checkout code
