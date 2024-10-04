@@ -8,6 +8,7 @@ use Illuminate\Process\Pipe;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Process;
 
+use function Laravel\Prompts\confirm;
 use function Laravel\Prompts\select;
 use function Laravel\Prompts\text;
 
@@ -21,7 +22,8 @@ class CruiseInstall extends Command implements PromptsForMissingInput
     protected $signature = 'cruise:install
                             {docker_id : Your docker ID you will be using with your laravel application}
                             {docker_image : Your laravel applications docker image name}
-                            {front_end_compiler : Front-end asset bundler}';
+                            {front_end_compiler : Front-end asset bundler}
+                            {--ddd : Enable Domain Driven Design application scaffolding}';
 
     /**
      * The console command description.
@@ -44,6 +46,10 @@ class CruiseInstall extends Command implements PromptsForMissingInput
         $this->publishDockerAssets();
 
         $this->renameDockerImages($this->argument('docker_id'), $this->argument('docker_image'));
+
+        if ($this->argument('ddd')) {
+            $this->enableDDD();
+        }
 
         $this->addComposerCommand('test', 'docker exec -it app vendor/bin/phpunit');
         $this->addComposerScript('start-dev');
@@ -75,6 +81,20 @@ class CruiseInstall extends Command implements PromptsForMissingInput
             Artisan::call('vendor:publish', ['--tag' => 'docker-vite', '--force' => true]);
         }
         $this->info("Published {$this->argument('front_end_compiler')} Dockerfiles & docker-compose.yml's");
+    }
+
+    private function enableDDD(): void
+    {
+        Artisan::call('vendor:publish', ['--tag' => 'ddd', '--force' => true]);
+        $this->info("Publish app/App/BaseApplication & bootstrap/app.php");
+
+        // Add namespacing
+        $this->warn("In order to make DDD work correctly, add the proper namespaces to the autoload.psr-4 section of your composer.json");
+        $this->info('
+            "App\\": "app/App",
+            "Domain\\": "app/Domain",
+            "Support\\": "app/Support",
+        ');
     }
 
     private function addComposerScript(string $script): void
@@ -178,6 +198,15 @@ class CruiseInstall extends Command implements PromptsForMissingInput
                     default: 'Vite',
                 );
             },
+            'ddd' => function () {
+                return confirm(
+                    label: 'Do you want to enable Domain Driven Design application scaffolding?',
+                    default: false,
+                    yes: 'Yes',
+                    no: 'No',
+                    hint: 'This will separate your application into App, Domain & Support namespaces.'
+                );
+            }
         ];
     }
 }

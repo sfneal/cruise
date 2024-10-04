@@ -63,6 +63,11 @@ class CruiseServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__.'/../../docker/services/vite' => base_path(''),
         ], 'docker-vite');
+
+        // Domain Driven Design - BaseApplication & bootstrap/app.php
+        $this->publishes([
+            __DIR__.'/../../docker/ddd' => base_path(''),
+        ], 'ddd');
     }
 
     /**
