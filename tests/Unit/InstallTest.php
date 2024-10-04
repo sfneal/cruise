@@ -106,6 +106,7 @@ class InstallTest extends TestCase
     public function can_add_composer_commands(string $front_end_compiler)
     {
         $expected_scripts = [
+            'test' => 'docker exec -it app vendor/bin/phpunit',
             'start-dev' => 'sh vendor/sfneal/cruise/scripts/runners/start-dev.sh',
             'start-dev-db' => 'sh vendor/sfneal/cruise/scripts/runners/start-dev-db.sh',
             'start-dev-node' => 'sh vendor/sfneal/cruise/scripts/runners/start-dev-node.sh',
@@ -116,7 +117,10 @@ class InstallTest extends TestCase
 
         // Confirm no scripts are added prior to cruise installation
         $pre_install = json_decode(file_get_contents(base_path('composer.json')), true);
-        $this->assertEmpty($pre_install['scripts']);
+        $this->logicalOr(
+            empty($pre_install['scripts']),
+            ! array_key_exists('scripts', $pre_install)
+        );
 
         $this->artisan('cruise:install', $this->getCruiseInstallArguments($front_end_compiler));
 

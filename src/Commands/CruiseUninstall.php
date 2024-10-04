@@ -58,6 +58,7 @@ class CruiseUninstall extends Command
         $this->info("Removed 'docker' directory from application root");
 
         // Remove compose scripts
+        $this->removeComposerScript('test');
         $this->removeComposerScript('start-dev');
         $this->removeComposerScript('start-dev-db');
         $this->removeComposerScript('start-dev-node');
