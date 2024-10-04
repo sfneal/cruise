@@ -72,7 +72,7 @@ class CruiseInstall extends Command implements PromptsForMissingInput
             Artisan::call('vendor:publish', ['--tag' => 'docker-webpack']);
         }
         if ($this->argument('front_end_compiler') == 'Vite') {
-            Artisan::call('vendor:publish', ['--tag' => 'docker-vite']);
+            Artisan::call('vendor:publish', ['--tag' => 'docker-vite', '--force' => true]);
         }
         $this->info("Published {$this->argument('front_end_compiler')} Dockerfiles & docker-compose.yml's");
     }
@@ -143,6 +143,7 @@ class CruiseInstall extends Command implements PromptsForMissingInput
 
         if ($process->successful()) {
             $this->info("Renamed docker images from {$og_full_image_name} to {$docker_id}/{$image_name}");
+            $this->warn('Warning: remember to update the server.hmr.host value in vite.config.js to your app url');
         } else {
             $this->info("Failed to rename docker images from {$og_full_image_name} to {$docker_id}/{$image_name}");
         }
