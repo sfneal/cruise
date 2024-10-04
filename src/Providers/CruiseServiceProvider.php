@@ -66,7 +66,7 @@ class CruiseServiceProvider extends ServiceProvider
 
         // Domain Driven Design - BaseApplication & bootstrap/app.php
         $this->publishes([
-            __DIR__.'/../../docker/ddd/BaseApplication.php' => base_path('app/App/BaseApplication'),
+            __DIR__.'/../../docker/ddd/BaseApplication.php' => base_path('app/App/BaseApplication.php'),
         ], 'ddd');
         $this->publishes([
             __DIR__.'/../../docker/ddd/app.php' => base_path('bootstrap/app.php'),
