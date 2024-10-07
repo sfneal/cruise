@@ -68,6 +68,35 @@ class InstallTest extends TestCase
 
     #[Test]
     #[DataProvider('frontEndCompilersProvider')]
+    public function can_copy_static_assets(string $front_end_compiler)
+    {
+        // Get list of docker asset files
+        $directory = __DIR__.'/../../docker/static';
+        $files = [];
+        foreach (scandir($directory) as $file) {
+            if ($file !== '.' && $file !== '..') {
+                $files[] = $directory.'/'.$file;
+            }
+        }
+
+        // Confirm files DON'T already exist
+        foreach ($files as $file) {
+            $file_path = base_path(basename($file));
+            $this->assertFalse(File::exists($file_path), "The file '{$file_path}' already exists");
+        }
+
+        // Run install command
+        Artisan::call('cruise:install', $this->getCruiseInstallArguments($front_end_compiler));
+
+        // Confirm files DO exists
+        foreach ($files as $file) {
+            $file_path = base_path(basename($file));
+            $this->assertTrue(File::exists($file_path), "The file '{$file_path}' does not exists");
+        }
+    }
+
+    #[Test]
+    #[DataProvider('frontEndCompilersProvider')]
     public function can_rename_docker_images(string $front_end_compiler)
     {
         // Run install command

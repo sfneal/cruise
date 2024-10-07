@@ -46,6 +46,7 @@ class CruiseUninstall extends Command
             'Dockerfile.dev.node',
             'version.txt',
             'vite.config.js',
+            '.dockerignore',
         ];
         $this->info('Removing docker related files...');
         foreach ($docker_files as $file) {
