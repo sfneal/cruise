@@ -4,7 +4,7 @@ on:
     push:
 
 jobs:
-    downstream:
+    webpack:
         runs-on: ${{ matrix.os }}
         strategy:
             fail-fast: false
@@ -12,7 +12,7 @@ jobs:
                 os: [ubuntu-latest]
                 php: [8.3]
 
-        name: Downstream App Installation
+        name: Downstream App Install | Webpack
 
         steps:
             -   name: Checkout code
@@ -63,5 +63,73 @@ jobs:
 
             -   name: Test Downstream App
                 working-directory: ../laravel-boilerplate-master
+                run: |
+                    composer start-test
+
+    vite:
+        runs-on: ${{ matrix.os }}
+        strategy:
+            fail-fast: false
+            matrix:
+                os: [ubuntu-latest]
+                php: [8.3]
+                flags: ["--ddd", ""]
+
+        name: Downstream App Install | Vite ${{ matrix.flags }}
+
+        steps:
+            -   name: Checkout code
+                uses: actions/checkout@v4
+
+            -   name: Setup PHP
+                uses: shivammathur/setup-php@v2
+                with:
+                    php-version: ${{ matrix.php }}
+                    coverage: none
+
+            -   name: Install Composer Dependencies
+                run: |
+                    composer update --prefer-dist --no-interaction
+
+            -   name: Set sfneal/cruise branch
+                run: |
+                    BRANCH=$(git rev-parse --abbrev-ref HEAD)
+                    if [ $BRANCH == 'HEAD' ]; then export BRANCH='master'; fi
+                    echo "CRUISE_BRANCH=$BRANCH" >> $GITHUB_ENV
+
+            -   name: Create New Laravel Application
+                run: |
+                    cd ../
+                    composer create-project laravel/laravel test-app
+                    cd test-app
+
+            -   name: Install Front-end Dependencies
+                working-directory: ../test-app
+                run: yarn install
+
+            -   name: Scaffold Laravel Breeze
+                working-directory: ../test-app
+                run: |
+                    composer require laravel/breeze --dev
+                    php artisan breeze:install blade --no-interaction
+
+            -   name: Add local repository to downstream composer.json
+                working-directory: ../test-app
+                run: |
+                    composer config minimum-stability dev
+                    composer config repositories.0 '{"type": "vcs", "url": "https://github.com/sfneal/cruise"}'
+
+            -   name: Add sfneal/cruise to composer requirements
+                working-directory: ../test-app
+                run: |
+                    composer require "sfneal/cruise dev-${{ env.CRUISE_BRANCH }}"
+
+            -   name: Install sfneal/cruise
+                working-directory: ../test-app
+                run: |
+                    php artisan cruise:install mydockerid myapplication vite ${{ matrix.flags }}
+
+            -   name: Test Downstream App
+                working-directory: ../test-app
                 run: |
                     composer start-test

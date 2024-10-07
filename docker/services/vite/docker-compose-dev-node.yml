@@ -17,10 +17,12 @@ services:
     working_dir: /var/www
     volumes:
       - app:/var/www
+      - public:/var/www/public
       - ./app:/var/www/app
       - ./public:/var/www/public
       - ./resources:/var/www/resources
       - ./routes:/var/www/routes
+      - ./tests:/var/www/tests
     depends_on:
       - cache
     networks:
@@ -41,6 +43,8 @@ services:
       - ./vite.config.js:/var/www/vite.config.js
       - ./public:/var/www/public
       - ./resources:/var/www/resources
+    ports:
+      - "5173:5173"
     depends_on:
       - app
     networks:
@@ -61,6 +65,7 @@ services:
       - ./public:/var/www/public
       - ./resources:/var/www/resources
       - ./routes:/var/www/routes
+      - ./tests:/var/www/tests
     depends_on:
       - app
     networks:
@@ -70,6 +75,7 @@ services:
   proxy:
     image: stephenneal/nginx-proxy:1.27-alpine
     container_name: proxy
+    restart: unless-stopped
     volumes:
       - certs:/etc/letsencrypt
     environment:
@@ -158,3 +164,4 @@ volumes:
   app:
   cache:
   certs:
+  public:

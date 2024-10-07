@@ -6,8 +6,10 @@ use Illuminate\Console\Command;
 use Illuminate\Contracts\Console\PromptsForMissingInput;
 use Illuminate\Process\Pipe;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Process;
 
+use function Laravel\Prompts\confirm;
 use function Laravel\Prompts\select;
 use function Laravel\Prompts\text;
 
@@ -21,7 +23,8 @@ class CruiseInstall extends Command implements PromptsForMissingInput
     protected $signature = 'cruise:install
                             {docker_id : Your docker ID you will be using with your laravel application}
                             {docker_image : Your laravel applications docker image name}
-                            {front_end_compiler : Front-end asset bundler}';
+                            {front_end_compiler : Front-end asset bundler}
+                            {--ddd : Enable Domain Driven Design application scaffolding}';
 
     /**
      * The console command description.
@@ -45,6 +48,11 @@ class CruiseInstall extends Command implements PromptsForMissingInput
 
         $this->renameDockerImages($this->argument('docker_id'), $this->argument('docker_image'));
 
+        if ($this->option('ddd')) {
+            $this->enableDDD();
+        }
+
+        $this->addComposerCommand('test', 'docker exec -it app vendor/bin/phpunit');
         $this->addComposerScript('start-dev');
         $this->addComposerScript('start-dev-db');
         $this->addComposerScript('start-dev-node');
@@ -67,25 +75,64 @@ class CruiseInstall extends Command implements PromptsForMissingInput
 
     private function publishDockerAssets(): void
     {
-        if ($this->argument('front_end_compiler') == 'Webpack') {
+        if (strtolower($this->argument('front_end_compiler')) == 'webpack') {
             Artisan::call('vendor:publish', ['--tag' => 'docker-webpack']);
         }
-        if ($this->argument('front_end_compiler') == 'Vite') {
-            Artisan::call('vendor:publish', ['--tag' => 'docker-vite']);
+        if (strtolower($this->argument('front_end_compiler')) == 'vite') {
+            Artisan::call('vendor:publish', ['--tag' => 'docker-vite', '--force' => true]);
         }
         $this->info("Published {$this->argument('front_end_compiler')} Dockerfiles & docker-compose.yml's");
     }
 
+    private function enableDDD(): void
+    {
+        Artisan::call('vendor:publish', ['--tag' => 'ddd', '--force' => true]);
+        $this->info('Published app/App/BaseApplication & bootstrap/app.php');
+
+        // Get Existing directories
+        $existing_directories = File::directories(base_path('app'));
+
+        // Create app/App, app/Domain & app/Support
+        foreach (['App', 'Domain', 'Support'] as $namespace) {
+            $path = base_path("app/$namespace");
+            if (! File::isDirectory($path)) {
+                File::makeDirectory($path);
+            }
+        }
+
+        // Move existing directories into app/App
+        foreach ($existing_directories as $directory) {
+            File::moveDirectory($directory, base_path('app/App').DIRECTORY_SEPARATOR.basename($directory));
+        }
+
+        // Add namespacing
+        $process = Process::path(base_path())->run('sh vendor/sfneal/cruise/scripts/utils/ddd-namespacing/linux.sh');
+
+        // Try again using Mac syntax instead of Windows
+        if (! $process->successful()) {
+            $process = Process::path(base_path())->run('sh vendor/sfneal/cruise/scripts/utils/ddd-namespacing/mac.sh');
+        }
+
+        if ($process->successful()) {
+            $this->info('Added DDD namespacing to composer.json');
+        } else {
+            $this->fail('Unable to add DDD namespacing to composer.json');
+        }
+    }
+
     private function addComposerScript(string $script): void
     {
-        $script_path = 'vendor/sfneal/cruise/scripts/runners';
+        $this->addComposerCommand($script, "sh vendor/sfneal/cruise/scripts/runners/$script.sh");
+    }
 
+    private function addComposerCommand(string $name, string $command): void
+    {
         $process = Process::run([
-            'composer', 'config', "scripts.$script", "sh $script_path/$script.sh", '--working-dir='.base_path(),
+            'composer', 'config', "scripts.$name", "$command", '--working-dir='.base_path(),
         ]);
 
         if ($process->successful()) {
-            $this->info("Added 'composer $script' command to composer.json");
+            $this->info("Added 'composer $name' command to composer.json");
         }
     }
 
@@ -139,6 +186,7 @@ class CruiseInstall extends Command implements PromptsForMissingInput
 
         if ($process->successful()) {
             $this->info("Renamed docker images from {$og_full_image_name} to {$docker_id}/{$image_name}");
+            $this->warn('Warning: remember to update the server.hmr.host value in vite.config.js to your app url');
         } else {
             $this->info("Failed to rename docker images from {$og_full_image_name} to {$docker_id}/{$image_name}");
         }
@@ -171,6 +219,15 @@ class CruiseInstall extends Command implements PromptsForMissingInput
                     label: 'Select Front-end asset compiler',
                     options: ['Webpack', 'Vite'],
                     default: 'Vite',
+                );
+            },
+            'ddd' => function () {
+                return confirm(
+                    label: 'Do you want to enable Domain Driven Design application scaffolding?',
+                    default: false,
+                    yes: 'Yes',
+                    no: 'No',
+                    hint: 'This will separate your application into App, Domain & Support namespaces.'
                 );
             },
         ];

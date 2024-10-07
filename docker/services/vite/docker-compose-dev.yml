@@ -18,7 +18,6 @@ services:
     volumes:
       - app:/var/www
       - ./app:/var/www/app
-      - ./public:/var/www/public
       - ./resources:/var/www/resources
       - ./routes:/var/www/routes
     depends_on:
@@ -38,7 +37,6 @@ services:
     volumes:
       - app:/var/www
       - ./app:/var/www/app
-      - ./public:/var/www/public
       - ./resources:/var/www/resources
       - ./routes:/var/www/routes
     depends_on:
@@ -50,6 +48,7 @@ services:
   proxy:
     image: stephenneal/nginx-proxy:1.27-alpine
     container_name: proxy
+    restart: unless-stopped
     volumes:
       - certs:/etc/letsencrypt
     environment:

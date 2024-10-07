@@ -54,6 +54,7 @@ class UninstallTest extends TestCase
     public function can_remove_composer_commands()
     {
         $expected_scripts = [
+            'test' => 'docker exec -it app vendor/bin/phpunit',
             'start-dev' => 'sh vendor/sfneal/cruise/scripts/runners/start-dev.sh',
             'start-dev-db' => 'sh vendor/sfneal/cruise/scripts/runners/start-dev-db.sh',
             'start-dev-node' => 'sh vendor/sfneal/cruise/scripts/runners/start-dev-node.sh',
