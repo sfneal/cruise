@@ -41,8 +41,8 @@ RUN yarn install
 
 # Copy vite files
 COPY ["vite.config.js", "/var/www/"]
-COPY ["postcss.config.js", "/var/www/"]
-COPY ["tailwind.config.js", "/var/www/"]
+#COPY ["postcss.config.js", "/var/www/"]
+#COPY ["tailwind.config.js", "/var/www/"]
 
 # Copy relevant files from base image
 COPY public /var/www/public/

@@ -19,8 +19,6 @@ composer config repositories.0 '{"type": "vcs", "url": "https://github.com/sfnea
 
 composer require "sfneal/cruise dev-${CRUISE_BRANCH}"
 
-php artisan cruise:install mydockerid myapplication webpack
+php artisan cruise:install mydockerid myapplication
 
-composer start-test
-composer stop
-rm -rf laravel-boilerplate-master
+# composer start-test

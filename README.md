@@ -62,36 +62,6 @@ Once the `php artsian cruise:install` command has been run you will have access 
 composer test
 ```
 
-### Cookbook
-#### Create a new Laravel application with Laravel Breeze & cruise installed
-```bash
-
-# Create new Laravel app
-composer create-project laravel/laravel test-app
-cd test-app
-
-# Install front-end dependencies
-yarn install
-
-# Install breeze
-composer require laravel/breeze --dev
-php artisan breeze:install
-
-# Remove sail - replaced by cruise
-composer remove laravel/sail
-
-# Install cruise
-composer require sfneal/cruise
-php artisan cruise:install
-
-
-# Start application running in dev environment
-composer start-dev
-
-# Stop application
-composer stop
-```
-
 ### Changelog
 
 Please see [CHANGELOG](CHANGELOG.md) for more information what has changed recently.

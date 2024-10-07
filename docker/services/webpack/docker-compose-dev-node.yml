@@ -69,7 +69,6 @@ services:
   proxy:
     image: stephenneal/nginx-proxy:1.26-alpine
     container_name: proxy
-    restart: unless-stopped
     volumes:
       - certs:/etc/letsencrypt
     environment:

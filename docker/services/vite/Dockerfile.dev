@@ -41,20 +41,22 @@ RUN yarn install
 
 # Copy vite files
 COPY ["vite.config.js", "/var/www/"]
-COPY ["postcss.config.js", "/var/www/"]
-COPY ["tailwind.config.js", "/var/www/"]
+#COPY ["postcss.config.js", "/var/www/"]
+#COPY ["tailwind.config.js", "/var/www/"]
 
 # Copy relevant files from base image
 COPY public /var/www/public/
 COPY resources/css /var/www/resources/css/
 COPY resources/js /var/www/resources/js/
-COPY resources/views /var/www/resources/views/
 
 # Compile webpack assets
 RUN yarn run ${yarn_env}
 
 # Remove node_modules directory
 RUN rm -r /var/www/node_modules
+
+# Copy Views directory last to avoid cache breaking
+COPY resources/views /var/www/resources/views/
 
 
 

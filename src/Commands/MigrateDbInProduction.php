@@ -4,6 +4,7 @@ namespace Sfneal\Cruise\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
+use Sfneal\Helpers\Laravel\AppInfo;
 
 class MigrateDbInProduction extends Command
 {
@@ -29,7 +30,7 @@ class MigrateDbInProduction extends Command
      */
     public function handle(): int
     {
-        if (config('app.env') == 'production') {
+        if (AppInfo::isEnvProduction()) {
             $this->info("Running database migrations because the app env is 'production'.");
             Artisan::call('migrate --force');
 

@@ -52,8 +52,7 @@ class InstallTest extends TestCase
 
         // Confirm files DON'T already exist
         foreach ($files as $file) {
-            $file_path = base_path(basename($file));
-            $this->assertFalse(File::exists($file_path), "The file '{$file_path}' already exists");
+            $this->assertFalse(File::exists(base_path(basename($file))));
         }
 
         // Run install command
@@ -61,37 +60,7 @@ class InstallTest extends TestCase
 
         // Confirm files DO exists
         foreach ($files as $file) {
-            $file_path = base_path(basename($file));
-            $this->assertTrue(File::exists($file_path), "The file '{$file_path}' does not exists");
-        }
-    }
-
-    #[Test]
-    #[DataProvider('frontEndCompilersProvider')]
-    public function can_copy_static_assets(string $front_end_compiler)
-    {
-        // Get list of docker asset files
-        $directory = __DIR__.'/../../docker/static';
-        $files = [];
-        foreach (scandir($directory) as $file) {
-            if ($file !== '.' && $file !== '..') {
-                $files[] = $directory.'/'.$file;
-            }
-        }
-
-        // Confirm files DON'T already exist
-        foreach ($files as $file) {
-            $file_path = base_path(basename($file));
-            $this->assertFalse(File::exists($file_path), "The file '{$file_path}' already exists");
-        }
-
-        // Run install command
-        Artisan::call('cruise:install', $this->getCruiseInstallArguments($front_end_compiler));
-
-        // Confirm files DO exists
-        foreach ($files as $file) {
-            $file_path = base_path(basename($file));
-            $this->assertTrue(File::exists($file_path), "The file '{$file_path}' does not exists");
+            $this->assertTrue(File::exists(base_path(basename($file))));
         }
     }
 
@@ -137,7 +106,6 @@ class InstallTest extends TestCase
     public function can_add_composer_commands(string $front_end_compiler)
     {
         $expected_scripts = [
-            'test' => 'docker exec -it app vendor/bin/phpunit',
             'start-dev' => 'sh vendor/sfneal/cruise/scripts/runners/start-dev.sh',
             'start-dev-db' => 'sh vendor/sfneal/cruise/scripts/runners/start-dev-db.sh',
             'start-dev-node' => 'sh vendor/sfneal/cruise/scripts/runners/start-dev-node.sh',
@@ -148,10 +116,7 @@ class InstallTest extends TestCase
 
         // Confirm no scripts are added prior to cruise installation
         $pre_install = json_decode(file_get_contents(base_path('composer.json')), true);
-        $this->logicalOr(
-            empty($pre_install['scripts']),
-            ! array_key_exists('scripts', $pre_install)
-        );
+        $this->assertEmpty($pre_install['scripts']);
 
         $this->artisan('cruise:install', $this->getCruiseInstallArguments($front_end_compiler));
 

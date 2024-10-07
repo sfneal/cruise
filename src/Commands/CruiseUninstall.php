@@ -45,8 +45,6 @@ class CruiseUninstall extends Command
             'Dockerfile.dev',
             'Dockerfile.dev.node',
             'version.txt',
-            'vite.config.js',
-            '.dockerignore',
         ];
         $this->info('Removing docker related files...');
         foreach ($docker_files as $file) {
@@ -60,7 +58,6 @@ class CruiseUninstall extends Command
         $this->info("Removed 'docker' directory from application root");
 
         // Remove compose scripts
-        $this->removeComposerScript('test');
         $this->removeComposerScript('start-dev');
         $this->removeComposerScript('start-dev-db');
         $this->removeComposerScript('start-dev-node');
