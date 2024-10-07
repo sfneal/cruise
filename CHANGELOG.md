@@ -1,5 +1,23 @@
 # Changelog
 
+## 2.1.0 - 2024-10-07
+
+### What's Changed
+
+* Add 'composer test' command by [@sfneal](https://github.com/sfneal) in https://github.com/sfneal/cruise/pull/44
+* Docker compose service ports, volumes & env vars by [@sfneal](https://github.com/sfneal) in https://github.com/sfneal/cruise/pull/45
+* Add vite.config.js to Docker services for Vite front-end compiler by [@sfneal](https://github.com/sfneal) in https://github.com/sfneal/cruise/pull/47
+* Update Dockerfile instructions by [@sfneal](https://github.com/sfneal) in https://github.com/sfneal/cruise/pull/48
+* Fix issue with sqlite database not being writeable by [@sfneal](https://github.com/sfneal) in https://github.com/sfneal/cruise/pull/50
+* Downstream application install tests for Vite by [@sfneal](https://github.com/sfneal) in https://github.com/sfneal/cruise/pull/53
+* Vite application with Domain Driven Design scaffolding by [@sfneal](https://github.com/sfneal) in https://github.com/sfneal/cruise/pull/58
+* Dependencies cleanup by [@sfneal](https://github.com/sfneal) in https://github.com/sfneal/cruise/pull/61
+* Docker ignore file - prevent issues with Vite hot module reloading by [@sfneal](https://github.com/sfneal) in https://github.com/sfneal/cruise/pull/62
+* Proxy container restarting & missing Docker volume by [@sfneal](https://github.com/sfneal) in https://github.com/sfneal/cruise/pull/63
+* [v2.1] Laravel v11 with Vite improvements by [@sfneal](https://github.com/sfneal) in https://github.com/sfneal/cruise/pull/46
+
+**Full Changelog**: https://github.com/sfneal/cruise/compare/2.0.0...2.1.0
+
 ## 2.0.0 - 2024-10-02
 
 ### What's Changed
