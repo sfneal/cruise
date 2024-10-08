@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.1.1 - 2024-10-08
+
+### What's Changed
+
+* Touch database/database.sqlite to ensure it exists by [@sfneal](https://github.com/sfneal) in https://github.com/sfneal/cruise/pull/65
+
+**Full Changelog**: https://github.com/sfneal/cruise/compare/2.1.0...2.1.1
+
 ## 2.1.0 - 2024-10-07
 
 ### What's Changed
