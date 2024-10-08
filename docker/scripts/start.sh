@@ -23,6 +23,7 @@ chmod -R 775 /var/www/bootstrap/cache
 sudo chown -R :www-data /var/www/
 sudo chmod -R 775 database
 sudo chown -R $(whoami) database
+touch /var/www/database/database.sqlite
 sudo chmod -R 775 /var/www/database/database.sqlite
 
 # Clear config and cache
